@@ -1,0 +1,24 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<mat-card *ngIf="!isLoading">
+  <form [formGroup]="form" (submit)="onSave()">
+    <mat-form-field>
+      <input
+        matInput
+        name="name"
+        type="text"
+        placeholder="Name of unit e.g. kg, l, gr, tsp"
+        formControlName="name"
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        name="description"
+        type="text"
+        placeholder="Descript the unit (optional)"
+        formControlName="description"
+      />
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit">Save unit</button>
+  </form>
+</mat-card>
