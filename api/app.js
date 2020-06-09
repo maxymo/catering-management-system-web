@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const unitRoutes = require("./routes/units");
+const userRoutes = require("./routes/user");
+const User = require("./models/user");
+const Unit = require("./models/unit");
+const Setting = require("./models/setting");
 const app = express();
 
 mongoose
@@ -10,8 +14,16 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => {
+  .then((conn) => {
     console.log("Connected to database!");
+    Setting.findOne({ name: "dateFirstStart" }).then((result) => {
+      if (!result) {
+        console.log("Initializing database");
+        User.initData(User);
+        Unit.initData(Unit);
+        Setting.initData(Setting);
+      }
+    });
   })
   .catch(() => {
     console.log("Contection failed");
@@ -34,5 +46,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/units", unitRoutes);
+app.use("/api/user", userRoutes);
 
 module.exports = app;

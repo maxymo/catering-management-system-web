@@ -76,7 +76,7 @@ exports.deleteUnit = (req, res, next) => {
     })
     .catch((error) => {
       res.status(500).json({
-        message: "Delete post failed",
+        message: "Delete unit failed",
       });
     });
 };
