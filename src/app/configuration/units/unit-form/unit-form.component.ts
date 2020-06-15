@@ -3,6 +3,9 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UnitService } from '../unit.service';
 import { Unit } from '../unit.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-unit-form',
@@ -14,6 +17,8 @@ export class UnitFormComponent implements OnInit {
   mode: string = 'create';
   unit: Unit;
   isLoading = false;
+  types = [];
+  selectedType = 'Mass';
 
   constructor(
     public unitService: UnitService,
@@ -27,7 +32,9 @@ export class UnitFormComponent implements OnInit {
         validators: [Validators.required],
       }),
       description: new FormControl(),
+      type: new FormControl(),
     });
+    this.types = this.unitService.getTypes();
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       this.isLoading = true;
       if (paramMap.has('id')) {
@@ -35,9 +42,11 @@ export class UnitFormComponent implements OnInit {
         this.mode = 'edit';
         this.unitService.getUnit(id).subscribe((result) => {
           this.unit = result.data;
+          console.log(this.unit);
           this.form.setValue({
             name: this.unit.name,
             description: this.unit.description,
+            type: this.unit.type,
           });
           this.isLoading = false;
         });
@@ -46,6 +55,7 @@ export class UnitFormComponent implements OnInit {
           id: null,
           name: '',
           description: '',
+          type: '',
           readonly: false,
         };
         this.isLoading = false;
@@ -62,27 +72,44 @@ export class UnitFormComponent implements OnInit {
       id: null,
       name: this.form.value.name,
       description: this.form.value.description,
+      type: this.form.value.type,
       readonly: false,
     };
 
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.unitService.addUnit(unitToSave).subscribe((result) => {
-        if (result.id) {
-          this.router.navigate(['/units']);
-        } else {
-          this.isLoading = false;
-        }
-      });
+      this.unitService
+        .addUnit(unitToSave)
+        .pipe(
+          catchError((_) => {
+            this.isLoading = false;
+            return throwError(_);
+          })
+        )
+        .subscribe((result) => {
+          if (result.id) {
+            this.router.navigate(['/units']);
+          } else {
+            this.isLoading = false;
+          }
+        });
     } else {
       unitToSave.id = this.unit.id;
-      this.unitService.updateUnit(unitToSave).subscribe((result) => {
-        if (result.message) {
-          this.router.navigate(['/units']);
-        } else {
-          this.isLoading = false;
-        }
-      });
+      this.unitService
+        .updateUnit(unitToSave)
+        .pipe(
+          catchError((_) => {
+            this.isLoading = false;
+            return throwError(_);
+          })
+        )
+        .subscribe((result) => {
+          if (result.message) {
+            this.router.navigate(['/units']);
+          } else {
+            this.isLoading = false;
+          }
+        });
     }
   }
 }

@@ -1,9 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,14 +11,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
-import { MainNavComponent } from './main-nav/main-nav.component';
-import { UnitListComponent } from './units/unit-list/unit-list.component';
+import { AngularMaterialModule } from './shared/angular-material/angular-material.module';
+import { MainNavComponent } from './shared/main-nav/main-nav.component';
+import { UnitListComponent } from './configuration/units/unit-list/unit-list.component';
 import { RoutingModule } from './routing/routing.module';
-import { TableComponent } from './table/table.component';
-import { ShopListComponent } from './shop-list/shop-list.component';
-import { UnitFormComponent } from './units/unit-form/unit-form.component';
-import { DeleteConfirmationComponent } from './delete-confirmation/delete-confirmation.component';
+import { TableComponent } from './shared/table/table.component';
+import { ShopListComponent } from './configuration/shop-list/shop-list.component';
+import { UnitFormComponent } from './configuration/units/unit-form/unit-form.component';
+import { DeleteConfirmationComponent } from './shared/delete-confirmation/delete-confirmation.component';
 import { LoginComponent } from './auth/login/login.component';
+import { ErrorComponent } from './shared/error/error.component';
+import { ErrorInterceptor } from './shared/error-interceptor';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { LoginComponent } from './auth/login/login.component';
     UnitFormComponent,
     DeleteConfirmationComponent,
     LoginComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,9 @@ import { LoginComponent } from './auth/login/login.component';
     ReactiveFormsModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

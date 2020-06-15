@@ -37,6 +37,7 @@ exports.createUnit = (req, res, next) => {
       name: unitName,
       description: req.body.description,
       readonly: req.body.readonly ? req.body.readonly : false,
+      type: req.body.type,
     });
 
     unit
@@ -98,19 +99,32 @@ exports.updateUnit = (req, res, next) => {
       _id: unitId,
       name: unitName,
       description: req.body.description,
+      type: req.body.type,
     });
-    Unit.updateOne({ _id: unitId, readonly: false }, unit)
-      .then((updatedUnit) => {
-        res.status(201).json({
-          message: "Unit updated succesfully.",
+    Unit.findById(unitId).then((fetchedUnit) => {
+      if (!fetchedUnit) {
+        res.status(400).json({
+          message: `Unit with id=${unitId} does not exist.`,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({
-          message: "Couldn't update unit",
+      } else if (fetchedUnit.readonly) {
+        res.status(400).json({
+          message: "Unit cannot be updated because is read only.",
         });
-      });
+      } else {
+        Unit.updateOne({ _id: unitId, readonly: false }, unit)
+          .then((updatedUnit) => {
+            res.status(201).json({
+              message: "Unit updated succesfully.",
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(500).json({
+              message: "Couldn't update unit",
+            });
+          });
+      }
+    });
   } catch (error) {
     console.error(error);
     res.status(400).json({

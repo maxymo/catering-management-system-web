@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, count } from 'rxjs/operators';
 
 import { Unit } from './unit.model';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 const BACKEND_URL = environment.apiUrl + 'units/';
 
@@ -30,7 +30,8 @@ export class UnitService {
                 id: unit._id,
                 name: unit.name,
                 description: unit.description,
-                readonly: unit.readonlt,
+                type: unit.type,
+                readonly: unit.readonly,
               };
             }),
             count: unitData.count,
@@ -69,6 +70,7 @@ export class UnitService {
           _id: string;
           name: string;
           description: string;
+          type: string;
           readonly: boolean;
         };
       }>(`${BACKEND_URL}${id}`)
@@ -79,10 +81,15 @@ export class UnitService {
               id: unitData.data._id,
               name: unitData.data.name,
               description: unitData.data.description,
+              type: unitData.data.type,
               readonly: unitData.data.readonly,
             },
           };
         })
       );
+  }
+
+  getTypes() {
+    return ['Length', 'Mass', 'Volume'];
   }
 }

@@ -15,14 +15,15 @@ export class UnitListComponent implements OnInit, OnDestroy {
   displayedColumns = [
     { name: 'name', displayName: 'Name' },
     { name: 'description', displayName: 'Description' },
+    { name: 'type', displayName: 'Type' },
   ];
   datasource: Unit[] = [];
   isLoading = false;
   unitListener: Subscription;
   totalItems = 0;
   pageIndex = 0;
-  pageSize = 2;
-  pageSizeOptions = [1, 2, 3, 5, 10];
+  pageSize = 10;
+
   currentPage = 1;
 
   constructor(public unitService: UnitService, private router: Router) {}

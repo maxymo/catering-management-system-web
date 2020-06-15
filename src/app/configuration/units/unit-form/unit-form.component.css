@@ -5,3 +5,7 @@ mat-form-field {
 mat-spinner {
   margin: auto;
 }
+
+mat-card-actions {
+  text-align: right;
+}

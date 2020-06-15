@@ -41,7 +41,7 @@
         [collapsedHeight]="'48px'"
         [expandedHeight]="'48px'"
       >
-        <mat-panel-title>Settings</mat-panel-title>
+        <mat-panel-title>Configuration</mat-panel-title>
       </mat-expansion-panel-header>
       <mat-nav-list>
         <a mat-list-item href="#">Menus</a>
@@ -88,7 +88,9 @@
             <span>Delivery List</span>
           </button>
         </mat-menu>
-        <button mat-button [matMenuTriggerFor]="settingsMenu">Settings</button>
+        <button mat-button [matMenuTriggerFor]="settingsMenu">
+          Configuration
+        </button>
         <mat-menu #settingsMenu="matMenu">
           <button mat-menu-item>
             <mat-icon>restaurant</mat-icon>
