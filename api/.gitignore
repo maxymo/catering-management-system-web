@@ -46,4 +46,4 @@ testem.log
 Thumbs.db
 
 nodemon.json
-api/request.http
+request.http
