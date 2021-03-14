@@ -3,31 +3,41 @@ const Unit = require("../models/unit");
 exports.getUnits = (req, res, next) => {
   const pageSize = +req.query.pageSize;
   const currentPage = +req.query.currentPage;
-  const query = Unit.find();
-  let fetchedUnits;
 
-  if (pageSize && currentPage) {
-    query.skip(pageSize * (currentPage - 1));
-    query.limit(pageSize);
-  }
-  query
-    .then((documents) => {
-      fetchedUnits = documents;
-      return Unit.countDocuments();
-    })
-    .then((count) => {
-      res.status(200).json({
-        message: "Units fetched successfully",
-        data: fetchedUnits,
-        count: count,
+  try {
+    const query = Unit.find();
+    let fetchedUnits;
+
+    if (pageSize && currentPage) {
+      query.skip(pageSize * (currentPage - 1));
+      query.limit(pageSize);
+    }
+
+    return query
+      .then((documents) => {
+        fetchedUnits = documents;
+        return Unit.countDocuments();
+      })
+      .then((count) => {
+        res.setHeader("content-type", "application/json");
+        res.status(200).json({
+          message: "Units fetched successfully..",
+          data: fetchedUnits,
+          count: count,
+        });
+        return;
+      })
+      .catch((error) => {
+        res.status(500).json({
+          message: "Fetching units failed.",
+        });
       });
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({
-        message: "Fetching units failed.",
-      });
+  } catch (err) {
+    res.status(500).json({
+      message: "Fetching units failed.",
     });
+    return err;
+  }
 };
 
 exports.createUnit = (req, res, next) => {
@@ -40,24 +50,26 @@ exports.createUnit = (req, res, next) => {
       type: req.body.type,
     });
 
-    unit
+    return unit
       .save()
       .then((createdUnit) => {
         res.status(201).json({
           message: "Unit created succesfully.",
           id: createdUnit._id,
         });
+        return;
       })
       .catch((error) => {
         res.status(500).json({
           message: "Couldn't create unit",
         });
+        return;
       });
   } catch (error) {
-    console.error(error);
     res.status(400).json({
       message: "Some of the inputs are not valid.",
     });
+    return;
   }
 };
 
@@ -126,7 +138,6 @@ exports.updateUnit = (req, res, next) => {
       }
     });
   } catch (error) {
-    console.error(error);
     res.status(400).json({
       message: "Some of the inputs are not valid.",
     });

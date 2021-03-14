@@ -43,9 +43,19 @@ const onListening = () => {
   console.log("Listening on " + bind);
 };
 
-const port = normalizePort(process.env.PORT || "3000");
+function stop() {
+  console.log("Closing server.");
+  require("./app").disconnectDatabase();
+  server.close();
+}
+
+const port = normalizePort(process.env.PORT || "8081");
 app.set("port", port);
+app.on("databaseReady", function () {
+  server.emit("databaseReady");
+});
 const server = http.createServer(app);
 server.on("error", onError);
 server.on("listening", onListening);
-server.listen(port);
+module.exports = server.listen(port);
+module.exports.stop = stop;

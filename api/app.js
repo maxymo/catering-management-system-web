@@ -9,6 +9,7 @@ const Unit = require("./models/unit");
 const Setting = require("./models/setting");
 const app = express();
 
+console.log("Connecting to " + process.env.MONGO_ATLAS_CONNECTION_STRING);
 mongoose
   .connect(process.env.MONGO_ATLAS_CONNECTION_STRING, {
     useNewUrlParser: true,
@@ -19,15 +20,25 @@ mongoose
     Setting.findOne({ name: "dateFirstStart" }).then((result) => {
       if (!result) {
         console.log("Initializing database");
-        User.initData(User);
-        Unit.initData(Unit);
-        Setting.initData(Setting);
+        User.initData(User).then((_) => {
+          Unit.initData(Unit).then((_) => {
+            Setting.initData(Setting).then((_) => {
+              app.emit("databaseReady");
+            });
+          });
+        });
       }
     });
+    return;
   })
   .catch(() => {
     console.log("Contection failed");
   });
+
+function disconnectDatabase() {
+  console.log("Disconnecting database");
+  mongoose.disconnect();
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -49,3 +60,4 @@ app.use("/api/units", unitRoutes);
 app.use("/api/user", userRoutes);
 
 module.exports = app;
+module.exports.disconnectDatabase = disconnectDatabase;

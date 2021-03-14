@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   isAdministrator: { type: Boolean, require: true },
 });
 
-userSchema.statics.initData = (User) => {
+userSchema.statics.initData = async (User) => {
   console.log("Initializing User collection.");
   bcrypt.hash("admin", 10).then((hash) => {
     let users = [
@@ -20,11 +20,13 @@ userSchema.statics.initData = (User) => {
       },
     ];
 
+    var promises = [];
     User.deleteMany({}, (err) => {
       users.forEach((user) => {
-        User.create(user);
+        promises.push(User.create(user));
       });
     });
+    Promise.all(promises);
   });
 };
 

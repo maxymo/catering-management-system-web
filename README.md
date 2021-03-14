@@ -4,14 +4,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to `http://localhost:8082/`. The app will automatically reload if you change any of the source files.
 
 ## Getting Started
 
 Follow these steps to run this app locally
 
 - Create a free mongoose database (https://www.mongodb.com/).
-- Create nodemon.json file in the root folder with the following environment constants (replace its values with the correct for your environment)
+- Create nodemon.json file inside "api" folder with the following environment constants (replace its values with the correct for your environment)
 
 ```json
 {

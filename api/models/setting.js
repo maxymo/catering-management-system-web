@@ -8,7 +8,7 @@ const settingSchema = mongoose.Schema({
 
 settingSchema.plugin(uniqueValidator);
 
-settingSchema.statics.initData = (Setting) => {
+settingSchema.statics.initData = async (Setting) => {
   console.log("Initializing Setting collection.");
   let settings = [
     {
@@ -18,11 +18,13 @@ settingSchema.statics.initData = (Setting) => {
     },
   ];
 
+  var promises = [];
   Setting.deleteMany({}, (err) => {
     settings.forEach((setting) => {
-      Setting.create(setting);
+      promises.push(Setting.create(setting));
     });
   });
+  Promise.all(promises);
 };
 
 module.exports = mongoose.model("Setting", settingSchema);
