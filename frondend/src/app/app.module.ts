@@ -16,8 +16,9 @@ import { MainNavComponent } from './shared/main-nav/main-nav.component';
 import { UnitListComponent } from './configuration/units/unit-list/unit-list.component';
 import { RoutingModule } from './routing/routing.module';
 import { TableComponent } from './shared/table/table.component';
-import { ShopListComponent } from './configuration/shop-list/shop-list.component';
+import { ShopListComponent } from './configuration/shops/shop-list/shop-list.component';
 import { UnitFormComponent } from './configuration/units/unit-form/unit-form.component';
+import { ShopFormComponent } from './configuration/shops/shop-form/shop-form.component';
 import { DeleteConfirmationComponent } from './shared/delete-confirmation/delete-confirmation.component';
 import { LoginComponent } from './auth/login/login.component';
 import { ErrorComponent } from './shared/error/error.component';
@@ -31,6 +32,7 @@ import { ErrorInterceptor } from './shared/error-interceptor';
     TableComponent,
     ShopListComponent,
     UnitFormComponent,
+    ShopFormComponent,
     DeleteConfirmationComponent,
     LoginComponent,
     ErrorComponent,
