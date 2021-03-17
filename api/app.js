@@ -5,12 +5,14 @@ const bodyParser = require("body-parser");
 const unitRoutes = require("./routes/units");
 const shopRoutes = require("./routes/shops");
 const ingredientRoutes = require("./routes/ingredients");
+const menuRoutes = require("./routes/menus");
 const userRoutes = require("./routes/user");
 
 const User = require("./models/user");
 const Unit = require("./models/unit");
 const Shop = require("./models/shop");
 const Ingredient = require("./models/ingredient");
+const Menu = require("./models/menu");
 const Setting = require("./models/setting");
 const app = express();
 
@@ -29,8 +31,10 @@ mongoose
           Unit.initData(Unit).then((_) => {
             Shop.initData(Shop).then((_) => {
               Ingredient.initData(Ingredient).then((_) => {
-                Setting.initData(Setting).then((_) => {
-                  app.emit("databaseReady");
+                Menu.initData(Menu).then((_) => {
+                  Setting.initData(Setting).then((_) => {
+                    app.emit("databaseReady");
+                  });
                 });
               });
             });
@@ -69,6 +73,7 @@ app.use("/api/units", unitRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/shops", shopRoutes);
 app.use("/api/ingredients", ingredientRoutes);
+app.use("/api/menus", menuRoutes);
 
 module.exports = app;
 module.exports.disconnectDatabase = disconnectDatabase;
