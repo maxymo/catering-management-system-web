@@ -190,6 +190,13 @@ const systemUnits = [
     type: "Volume",
     __v: 0,
   },
+  {
+    name: "quantity",
+    readonly: true,
+    description: "e.g. 1, 2, 5, 12, etc.",
+    type: "Quantity",
+    __v: 0,
+  },
 ];
 
 unitSchema.statics.initData = async (Unit) => {

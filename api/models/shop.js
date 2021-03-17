@@ -7,6 +7,26 @@ const shopSchema = mongoose.Schema({
 });
 
 const systemShops = [
+  {
+    name: "The Big Bazar",
+    readonly: false,
+    description: "For exotic ingredients.",
+  },
+  {
+    name: "Market A",
+    readonly: false,
+    description: "For fruits and vegetables.",
+  },
+  {
+    name: "Mega Shop",
+    readonly: false,
+    description: "For other ingredients.",
+  },
+  {
+    name: "Mr Butcher",
+    readonly: false,
+    description: "For meats.",
+  }
 ];
 
 shopSchema.statics.initData = async (Shop) => {

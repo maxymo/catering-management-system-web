@@ -110,7 +110,6 @@ exports.updateShop = (req, res, next) => {
       _id: shopId,
       name: shopName,
       description: req.body.description,
-      type: req.body.type,
     });
     Shop.findById(shopId).then((fetchedShop) => {
       if (!fetchedShop) {
