@@ -80,7 +80,7 @@ export class IngredientService {
             data: {
               id: ingredientData.data._id,
               name: ingredientData.data.name,
-              shopName: ingredientData.data.name,
+              shopName: ingredientData.data.shopName,
               description: ingredientData.data.description,
               readonly: ingredientData.data.readonly,
             },

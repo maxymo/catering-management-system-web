@@ -19,6 +19,8 @@ import { ShopFormComponent } from './configuration/shops/shop-form/shop-form.com
 import { ShopListComponent } from './configuration/shops/shop-list/shop-list.component';
 import { IngredientFormComponent } from './configuration/ingredients/ingredient-form/ingredient-form.component';
 import { IngredientListComponent } from './configuration/ingredients/ingredient-list/ingredient-list.component';
+import { MenuFormComponent } from './configuration/menus/menu-form/menu-form.component';
+import { MenuListComponent } from './configuration/menus/menu-list/menu-list.component';
 import { TableComponent } from './shared/table/table.component';
 import { RoutingModule } from './routing/routing.module';
 import { DeleteConfirmationComponent } from './shared/delete-confirmation/delete-confirmation.component';
@@ -36,6 +38,8 @@ import { ErrorInterceptor } from './shared/error-interceptor';
     ShopListComponent,
     IngredientFormComponent,
     IngredientListComponent,
+    MenuFormComponent,
+    MenuListComponent,
     TableComponent,
     DeleteConfirmationComponent,
     LoginComponent,

@@ -7,7 +7,7 @@ const menuSchema = mongoose.Schema({
   portions: { type: Number, require: true },
   ingredients: [
     {
-      ingredientName: { type: String, require: true },
+      name: { type: String, require: true },
       unitName: { type: String, require: true },
       quantity: { type: Number, require: true }
     }

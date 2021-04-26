@@ -99,6 +99,7 @@ exports.getMenu = (req, res, next) => {
   const query = Menu.findById(id);
 
   query.then((menu) => {
+    console.log(menu);
     res.status(200).json({ data: menu });
   });
 };

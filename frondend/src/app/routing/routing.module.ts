@@ -6,6 +6,8 @@ import { ShopFormComponent } from '../configuration/shops/shop-form/shop-form.co
 import { ShopListComponent } from '../configuration/shops/shop-list/shop-list.component';
 import { IngredientFormComponent } from '../configuration/ingredients/ingredient-form/ingredient-form.component';
 import { IngredientListComponent } from '../configuration/ingredients/ingredient-list/ingredient-list.component';
+import { MenuFormComponent } from '../configuration/menus/menu-form/menu-form.component';
+import { MenuListComponent } from '../configuration/menus/menu-list/menu-list.component';
 import { LoginComponent } from '../auth/login/login.component';
 import { AuthGuard } from '../auth/auth.guard';
 import { AppComponent } from '../app.component';
@@ -44,6 +46,17 @@ const routes = [
   {
     path: 'ingredients/edit/:id',
     component: IngredientFormComponent,
+    canActivate: [AuthGuard],
+  },
+  { path: 'menus', component: MenuListComponent, canActivate: [AuthGuard] },
+  {
+    path: 'menus/create',
+    component: MenuFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'menus/edit/:id',
+    component: MenuFormComponent,
     canActivate: [AuthGuard],
   },
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },

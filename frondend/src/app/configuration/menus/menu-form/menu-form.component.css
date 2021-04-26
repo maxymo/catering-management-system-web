@@ -1,0 +1,19 @@
+mat-form-field {
+  width: 100%;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+mat-card-actions {
+  text-align: right;
+}
+
+table {
+  width: 100%;
+}
+
+.actionsColumn {
+  width: 130px;
+}
