@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
 import { MenuService } from '../menu.service';
 import { Menu } from '../menu.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-// import { IngredientDialogComponent } from './ingredient-dialog/ingredient-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 import { MenuIngredient } from '../menu.ingredient.model';
+import { IngredientDialogComponent } from './ingredient-dialog/ingredient-dialog.component';
 
 @Component({
   selector: 'app-menu-form',
@@ -15,23 +16,24 @@ import { MenuIngredient } from '../menu.ingredient.model';
   styleUrls: ['./menu-form.component.css'],
 })
 export class MenuFormComponent implements OnInit {
-  form: FormGroup;
+  masterForm: FormGroup;
+  detailForm: FormGroup;
   mode: string = 'create';
   menu: Menu;
   isLoading = false;
   displayedColumns: string[] = ['name', 'quantity', 'unitName', 'actions'];
   dataSource = null;
-  animal: string;
-  name: string;
 
   constructor(
     public menuService: MenuService,
     public router: Router,
     public route: ActivatedRoute,
+    public dialog: MatDialog,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.form = new FormGroup({
+    this.masterForm = new FormGroup({
       name: new FormControl(null, {
         validators: [Validators.required],
       }),
@@ -41,8 +43,13 @@ export class MenuFormComponent implements OnInit {
           Validators.required,
           Validators.min(1),
           Validators.max(Number.MAX_VALUE)]
-      })
+      }),
     });
+    this.detailForm = new FormGroup({
+      ingredients: this.fb.array([]),
+    }),
+
+    ///ingredients: this.fb.array([MenuIngredient]),
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       this.isLoading = true;
       if (paramMap.has('id')) {
@@ -51,12 +58,19 @@ export class MenuFormComponent implements OnInit {
         this.menuService.getMenu(id).subscribe((result) => {
           this.menu = result.data;
           console.log(this.menu);
-          this.form.setValue({
+          this.masterForm.patchValue({
             name: this.menu.name,
             description: this.menu.description,
             portions: this.menu.portions,
           });
-          this.dataSource = this.menu.ingredients;
+          if (this.menu.ingredients != null){
+            this.menu.ingredients.forEach(ingredient => {
+              this.addIngredient(ingredient.name, ingredient.unitName, ingredient.quantity)
+            });
+          }
+          // this.detailForm.setValue({
+          //   ingredients: this.menu.ingredients,
+          // });
           this.isLoading = false;
         });
       } else {
@@ -73,30 +87,50 @@ export class MenuFormComponent implements OnInit {
     });
   }
 
-  // openDialog(element: MenuIngredient): void {
-  //   const dialogRef = this.dialog.open(IngredientDialogComponent, {
-  //     width: '250px',
-  //     data: element
-  //   });
+  addIngredient(name: string, unitName: string, quantity: number){
+    const ingredientForm = this.fb.group({
+      name: [name, Validators.required],
+      unitName: [unitName, Validators.required],
+      quantity: [quantity, Validators.required]
+    });
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     console.log('The dialog was closed');
-  //     this.animal = result;
-  //   });
-  // }
+    this.ingredients.push(ingredientForm);
+  }
+  deleteIngredient(ingredientIndex: number) {
+    this.ingredients.removeAt(ingredientIndex);
+  }
+
+  get ingredients(): FormArray {
+    return this.detailForm.get('ingredients') as FormArray;
+  }
+
+  openDialog(element: MenuIngredient): void {
+    const dialogRef = this.dialog.open(IngredientDialogComponent, {
+      width: '250px',
+      data: Object.assign({}, element)
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(element);
+      console.log(result);
+      element = result;
+      console.log(element);
+    });
+  }
 
   onSave() {
-    if (!this.form.valid) {
+    if (!this.masterForm.valid) {
       return;
     }
-
+    console.log(this.detailForm.value.ingredients);
     const menuToSave: Menu = {
       id: null,
-      name: this.form.value.name,
-      description: this.form.value.description,
+      name: this.masterForm.value.name,
+      description: this.masterForm.value.description,
       readonly: false,
-      portions: this.form.value.portions,
-      ingredients: null
+      portions: this.masterForm.value.portions,
+      ingredients: this.detailForm.value.ingredients,
     };
 
     this.isLoading = true;
