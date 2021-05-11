@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormArray, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
 import { MenuService } from '../menu.service';
 import { Menu } from '../menu.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuIngredient } from '../menu.ingredient.model';
@@ -16,13 +16,12 @@ import { IngredientDialogComponent } from './ingredient-dialog/ingredient-dialog
   styleUrls: ['./menu-form.component.css'],
 })
 export class MenuFormComponent implements OnInit {
-  masterForm: FormGroup;
-  detailForm: FormGroup;
+  menuForm: FormGroup;
   mode: string = 'create';
   menu: Menu;
   isLoading = false;
-  displayedColumns: string[] = ['name', 'quantity', 'unitName', 'actions'];
-  dataSource = null;
+  displayColumns: string[] = ['name', 'unitName', 'quantity', 'actions'];
+  dataSource = new BehaviorSubject<AbstractControl[]>([]);
 
   constructor(
     public menuService: MenuService,
@@ -33,7 +32,7 @@ export class MenuFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.masterForm = new FormGroup({
+    this.menuForm = new FormGroup({
       name: new FormControl(null, {
         validators: [Validators.required],
       }),
@@ -44,12 +43,9 @@ export class MenuFormComponent implements OnInit {
           Validators.min(1),
           Validators.max(Number.MAX_VALUE)]
       }),
-    });
-    this.detailForm = new FormGroup({
       ingredients: this.fb.array([]),
-    }),
+    });
 
-    ///ingredients: this.fb.array([MenuIngredient]),
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       this.isLoading = true;
       if (paramMap.has('id')) {
@@ -57,20 +53,16 @@ export class MenuFormComponent implements OnInit {
         this.mode = 'edit';
         this.menuService.getMenu(id).subscribe((result) => {
           this.menu = result.data;
-          console.log(this.menu);
-          this.masterForm.patchValue({
+          this.menuForm.patchValue({
             name: this.menu.name,
             description: this.menu.description,
             portions: this.menu.portions,
           });
           if (this.menu.ingredients != null){
             this.menu.ingredients.forEach(ingredient => {
-              this.addIngredient(ingredient.name, ingredient.unitName, ingredient.quantity)
+              this.addIngredient(ingredient.name, ingredient.unitName, ingredient.quantity, false)
             });
           }
-          // this.detailForm.setValue({
-          //   ingredients: this.menu.ingredients,
-          // });
           this.isLoading = false;
         });
       } else {
@@ -87,7 +79,11 @@ export class MenuFormComponent implements OnInit {
     });
   }
 
-  addIngredient(name: string, unitName: string, quantity: number){
+  updateView() {
+    this.dataSource.next(this.ingredients.controls);
+  }
+
+  addIngredient(name: string, unitName: string, quantity: number, noUpdate?: boolean){
     const ingredientForm = this.fb.group({
       name: [name, Validators.required],
       unitName: [unitName, Validators.required],
@@ -95,13 +91,16 @@ export class MenuFormComponent implements OnInit {
     });
 
     this.ingredients.push(ingredientForm);
+    if (!noUpdate) { this.updateView(); }
   }
-  deleteIngredient(ingredientIndex: number) {
+
+  deleteIngredient(ingredientIndex: number, noUpdate?: boolean) {
     this.ingredients.removeAt(ingredientIndex);
+    if (!noUpdate) { this.updateView(); }
   }
 
   get ingredients(): FormArray {
-    return this.detailForm.get('ingredients') as FormArray;
+    return this.menuForm.get('ingredients') as FormArray;
   }
 
   openDialog(element: MenuIngredient): void {
@@ -112,36 +111,31 @@ export class MenuFormComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      console.log(element);
-      console.log(result);
       element = result;
-      console.log(element);
     });
   }
 
   onSave() {
-    if (!this.masterForm.valid) {
+    if (!this.menuForm.valid) {
       return;
     }
-    console.log(this.detailForm.value.ingredients);
     const menuToSave: Menu = {
       id: null,
-      name: this.masterForm.value.name,
-      description: this.masterForm.value.description,
+      name: this.menuForm.value.name,
+      description: this.menuForm.value.description,
       readonly: false,
-      portions: this.masterForm.value.portions,
-      ingredients: this.detailForm.value.ingredients,
+      portions: this.menuForm.value.portions,
+      ingredients: this.menuForm.value.ingredients,
     };
-
     this.isLoading = true;
     if (this.mode === 'create') {
       this.menuService
-        .addMenu(menuToSave)
-        .pipe(
-          catchError((_) => {
-            this.isLoading = false;
-            return throwError(_);
-          })
+      .addMenu(menuToSave)
+      .pipe(
+        catchError((_) => {
+          this.isLoading = false;
+          return throwError(_);
+        })
         )
         .subscribe((result) => {
           if (result.id) {
@@ -150,23 +144,23 @@ export class MenuFormComponent implements OnInit {
             this.isLoading = false;
           }
         });
-    } else {
-      menuToSave.id = this.menu.id;
-      this.menuService
-        .updateMenu(menuToSave)
-        .pipe(
-          catchError((_) => {
-            this.isLoading = false;
-            return throwError(_);
-          })
-        )
-        .subscribe((result) => {
-          if (result.message) {
-            this.router.navigate(['/menus']);
-          } else {
-            this.isLoading = false;
-          }
-        });
+      } else {
+        menuToSave.id = this.menu.id;
+        this.menuService
+          .updateMenu(menuToSave)
+          .pipe(
+            catchError((_) => {
+              this.isLoading = false;
+              return throwError(_);
+            })
+          )
+          .subscribe((result) => {
+            if (result.message) {
+              this.router.navigate(['/menus']);
+            } else {
+              this.isLoading = false;
+            }
+          });
     }
   }
 
