@@ -18,6 +18,7 @@ export class IngredientFormComponent implements OnInit {
   mode: string = 'create';
   ingredient: Ingredient;
   isLoading = false;
+
   filteredShopNames: Observable<string[]>;
   shopNames: string[];
 
