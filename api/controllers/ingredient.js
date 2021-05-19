@@ -44,12 +44,12 @@ exports.createIngredient = (req, res, next) => {
   try {
     const ingredientName = req.body.name.trim();
     const ingredient = new Ingredient({
+      readonly: false,
       name: ingredientName,
       description: req.body.description,
       shopName: req.body.shopName,
-      unitNameToBuy: req.body.unitNameToBuy,
-      unitNameToUse: req.body.unitNameToUse,
-      readonly: req.body.readonly ? req.body.readonly : false,
+      defaultUnitWhenBuying: req.body.defaultUnitWhenBuying,
+      defaultUnitWhenUsing: req.body.defaultUnitWhenUsing,
     });
 
     return ingredient
@@ -111,11 +111,12 @@ exports.updateIngredient = (req, res, next) => {
     const ingredientId = req.body.id;
     const ingredient = new Ingredient({
       _id: ingredientId,
+      readonly: false,
       name: ingredientName,
       description: req.body.description,
       shopName: req.body.shopName,
-      unitNameToBuy: req.body.unitNameToBuy,
-      unitNameToUse: req.body.unitNameToUse,
+      defaultUnitWhenBuying: req.body.defaultUnitWhenBuying,
+      defaultUnitWhenUsing: req.body.defaultUnitWhenUsing,
     });
     Ingredient.findById(ingredientId).then((fetchedIngredient) => {
       if (!fetchedIngredient) {

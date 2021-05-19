@@ -40,6 +40,43 @@ exports.getShops = (req, res, next) => {
   }
 };
 
+exports.getShopNames = (req, res, next) => {
+
+  try {
+    const query = Shop.find();
+    let fetchedShops;
+
+    return query
+      .then((documents) => {
+        fetchedShops = documents;
+        return Shop.countDocuments();
+      })
+      .then((count) => {
+        res.setHeader("content-type", "application/json");
+        res.status(200).json({
+          message: "Shop namess fetched successfully..",
+          data: fetchedShops.map(shop => {
+            return {
+              shopName: shop.name,
+            }
+          }),
+          count: count,
+        });
+        return;
+      })
+      .catch((error) => {
+        res.status(500).json({
+          message: "Fetching shops failed.",
+        });
+      });
+  } catch (err) {
+    res.status(500).json({
+      message: "Fetching shops failed.",
+    });
+    return err;
+  }
+};
+
 exports.createShop = (req, res, next) => {
   try {
     const shopName = req.body.name.trim();

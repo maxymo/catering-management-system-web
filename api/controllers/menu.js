@@ -44,11 +44,11 @@ exports.createMenu = (req, res, next) => {
   try {
     const menuName = req.body.name.trim();
     const menu = new Menu({
+      readonly: false,
       name: menuName,
       description: req.body.description,
       portions: req.body.portions,
       ingredients: req.body.ingredients,
-      readonly: false,
     });
 
     return menu
@@ -110,6 +110,7 @@ exports.updateMenu = (req, res, next) => {
     const menuId = req.body.id;
     const menu = new Menu({
       _id: menuId,
+      readonly: false,
       name: menuName,
       description: req.body.description,
       portions: req.body.portions,
