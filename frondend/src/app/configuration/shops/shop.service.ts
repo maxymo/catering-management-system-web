@@ -11,8 +11,10 @@ const BACKEND_URL = environment.apiUrl + 'shops/';
 @Injectable({ providedIn: 'root' })
 export class ShopService {
   shops: Shop[] = [];
+  shopNames: string[] = [];
 
   private shopsUpdated = new Subject<{ shops: Shop[]; count: number }>();
+  private shopNamesUpdated = new Subject<{ shopNames: string[]; count: number }>();
 
   constructor(private http: HttpClient) {}
 
@@ -44,6 +46,26 @@ export class ShopService {
           count: transformedShopsData.count,
         });
       });
+  }
+
+  getShopNames() {
+    var count = 0;
+    return this.http
+      .get<{ data: any; count: number }>(
+        `${BACKEND_URL}/names`
+      )
+      .pipe(
+        map((shopData) => {
+          return {
+            shopNames: shopData.data.map((shop) => {
+              return {
+                name: shop.shopName,
+              };
+            }),
+            count: shopData.count,
+          };
+        })
+      );
   }
 
   getShopUpdateListener() {

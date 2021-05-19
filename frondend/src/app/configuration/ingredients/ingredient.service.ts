@@ -31,6 +31,8 @@ export class IngredientService {
                 name: ingredient.name,
                 shopName: ingredient.shopName,
                 description: ingredient.description,
+                defaultUnitWhenBuying: ingredient.defaultUnitWhenBuying,
+                defaultUnitWhenUsing: ingredient.defaultUnitWhenUsing,
                 readonly: ingredient.readonly,
               };
             }),
@@ -71,6 +73,8 @@ export class IngredientService {
           name: string;
           shopName: string;
           description: string;
+          defaultUnitWhenUsing: string;
+          defaultUnitWhenBuying: string;
           readonly: boolean;
         };
       }>(`${BACKEND_URL}${id}`)
@@ -82,6 +86,8 @@ export class IngredientService {
               name: ingredientData.data.name,
               shopName: ingredientData.data.shopName,
               description: ingredientData.data.description,
+              defaultUnitWhenUsing: ingredientData.data.defaultUnitWhenUsing,
+              defaultUnitWhenBuying: ingredientData.data.defaultUnitWhenBuying,
               readonly: ingredientData.data.readonly,
             },
           };
