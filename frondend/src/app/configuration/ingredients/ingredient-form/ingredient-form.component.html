@@ -33,7 +33,13 @@
           type="text"
           placeholder="Default unit to use when buying this ingredient"
           formControlName="defaultUnitWhenBuying"
+          [matAutocomplete]="autoUnitsWhenBuying"
         />
+        <mat-autocomplete #autoUnitsWhenBuying="matAutocomplete">
+          <mat-option *ngFor="let option of filteredUnitsWhenBuying | async" [value]="option.name">
+            {{option.name}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
       <mat-form-field>
         <input
@@ -42,7 +48,13 @@
           type="text"
           placeholder="Default unit to use when using this ingredient"
           formControlName="defaultUnitWhenUsing"
+          [matAutocomplete]="autoUnitsWhenUsing"
         />
+        <mat-autocomplete #autoUnitsWhenUsing="matAutocomplete">
+          <mat-option *ngFor="let option of filteredUnitsWhenUsing | async" [value]="option.name">
+            {{option.name}}
+          </mat-option>
+        </mat-autocomplete>
       </mat-form-field>
       <mat-form-field>
         <input

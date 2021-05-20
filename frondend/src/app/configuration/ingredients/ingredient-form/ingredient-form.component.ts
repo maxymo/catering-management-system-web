@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IngredientService } from '../ingredient.service';
 import { ShopService } from '../../shops/shop.service';
@@ -7,13 +7,16 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { catchError, map, startWith } from 'rxjs/operators';
 import { throwError, Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Unit } from '../../units/unit.model';
+import { UnitService } from '../../units/unit.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-ingredient-form',
   templateUrl: './ingredient-form.component.html',
   styleUrls: ['./ingredient-form.component.css'],
 })
-export class IngredientFormComponent implements OnInit {
+export class IngredientFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
   mode: string = 'create';
   ingredient: Ingredient;
@@ -22,24 +25,31 @@ export class IngredientFormComponent implements OnInit {
   filteredShopNames: Observable<string[]>;
   shopNames: string[];
 
+  unitListener: Subscription;
+  filteredUnitsWhenBuying: Observable<Unit[]>;
+  filteredUnitsWhenUsing: Observable<Unit[]>;
+  units: Unit[];
+
   constructor(
     public ingredientService: IngredientService,
     public shopService: ShopService,
+    public unitService: UnitService,
     public router: Router,
     public route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     var shopNameControl = new FormControl();
+    var unitToBuyControl = new FormControl();
+    var unitToUseControl = new FormControl();
     this.form = new FormGroup({
       name: new FormControl(null, {
         validators: [Validators.required],
       }),
       shopName: shopNameControl,
       description: new FormControl(),
-      defaultUnitWhenBuying: new FormControl(),
-      defaultUnitWhenUsing: new FormControl(),
-
+      defaultUnitWhenBuying: unitToBuyControl,
+      defaultUnitWhenUsing: unitToUseControl,
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       this.isLoading = true;
@@ -54,7 +64,6 @@ export class IngredientFormComponent implements OnInit {
             this.shopNames = transformedShopsData.shopNames.map((shop => {
               return shop.name
             }))
-            console.log(transformedShopsData);
           });
           this.form.patchValue({
             name: this.ingredient.name,
@@ -66,7 +75,25 @@ export class IngredientFormComponent implements OnInit {
           this.filteredShopNames = shopNameControl.valueChanges
           .pipe(
             startWith(''),
-            map(value => this._filter(value))
+            map(value => this._shopsFilter(value))
+          );
+          this.units = [];
+          this.unitService.getUnits(0, 999999);
+          this.unitListener = this.unitService
+          .getUnitUpdateListener()
+          .subscribe((unitData) => {
+            this.units = unitData.units;
+            console.log(unitData.units);
+          });
+          this.filteredUnitsWhenBuying = unitToBuyControl.valueChanges
+          .pipe(
+            startWith(''),
+            map(value => this._unitsFilter(value))
+          );
+          this.filteredUnitsWhenUsing = unitToUseControl.valueChanges
+          .pipe(
+            startWith(''),
+            map(value => this._unitsFilter(value))
           );
           this.isLoading = false;
         });
@@ -83,6 +110,10 @@ export class IngredientFormComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  ngOnDestroy(){
+    this.unitListener.unsubscribe();
   }
 
   onSave() {
@@ -137,9 +168,15 @@ export class IngredientFormComponent implements OnInit {
     }
   }
 
-  private _filter(value: string): string[] {
+  private _shopsFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
     return this.shopNames.filter(option => option.toLowerCase().includes(filterValue));
+  }
+
+  private _unitsFilter(value: string): Unit[] {
+    const filterValue = value.toLowerCase();
+
+    return this.units.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 }
