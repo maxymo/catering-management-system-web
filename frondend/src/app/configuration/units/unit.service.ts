@@ -47,6 +47,37 @@ export class UnitService {
       });
   }
 
+  getUnitsForDropDownList() {
+    var count = 0;
+    this.http
+      .get<{ data: any; count: number }>(
+        `${BACKEND_URL}?currentPage=${0}&pageSize=${9999999}`
+      )
+      .pipe(
+        map((unitData) => {
+          return {
+            units: unitData.data.map((unit) => {
+              return {
+                id: unit._id,
+                name: unit.name,
+                description: unit.description,
+                type: unit.type,
+                readonly: unit.readonly,
+              };
+            }),
+            count: unitData.count,
+          };
+        })
+      )
+      .subscribe((transformedUnitsData) => {
+        this.units = transformedUnitsData.units;
+        this.unitsUpdated.next({
+          units: [...this.units],
+          count: transformedUnitsData.count,
+        });
+      });
+  }
+
   getUnitUpdateListener() {
     return this.unitsUpdated.asObservable();
   }

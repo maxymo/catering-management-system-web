@@ -36,9 +36,11 @@
           [matAutocomplete]="autoUnitsWhenBuying"
         />
         <mat-autocomplete #autoUnitsWhenBuying="matAutocomplete">
-          <mat-option *ngFor="let option of filteredUnitsWhenBuying | async" [value]="option.name">
-            {{option.name}}
-          </mat-option>
+          <mat-optgroup *ngFor="let group of filteredUnitsWhenBuying | async | groupByUnitType " [label]="group.type">
+            <mat-option *ngFor="let option of group.units" [value]="option.name">
+              {{option.name}}
+            </mat-option>
+          </mat-optgroup>
         </mat-autocomplete>
       </mat-form-field>
       <mat-form-field>
