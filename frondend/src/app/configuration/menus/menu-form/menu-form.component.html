@@ -58,7 +58,17 @@
             matInput
             type="text"
             formControlName="unitName"
-            placeholder="Unit">
+            placeholder="Unit"
+            #temp
+            (focus)="onFocusUnit(temp)"
+            [matAutocomplete]="autoUnits">
+            <mat-autocomplete #autoUnits="matAutocomplete">
+              <mat-optgroup *ngFor="let group of filteredUnits | async | groupByUnitType" [label]="group.type">
+                <mat-option *ngFor="let option of group.units" [value]="option.name">
+                  {{option.name}}
+                </mat-option>
+              </mat-optgroup>
+            </mat-autocomplete>
           </td>
         </ng-container>
 

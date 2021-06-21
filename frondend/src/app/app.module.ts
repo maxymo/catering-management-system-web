@@ -18,7 +18,8 @@ import { UnitListComponent } from './configuration/units/unit-list/unit-list.com
 import { UnitFormComponent } from './configuration/units/unit-form/unit-form.component';
 import { ShopFormComponent } from './configuration/shops/shop-form/shop-form.component';
 import { ShopListComponent } from './configuration/shops/shop-list/shop-list.component';
-import { GroupByPipe, IngredientFormComponent } from './configuration/ingredients/ingredient-form/ingredient-form.component';
+import { IngredientFormComponent } from './configuration/ingredients/ingredient-form/ingredient-form.component';
+import { GroupByPipe } from './shared/pipes/group-by-unit-type';
 import { IngredientListComponent } from './configuration/ingredients/ingredient-list/ingredient-list.component';
 import { MenuFormComponent } from './configuration/menus/menu-form/menu-form.component';
 import { IngredientDialogComponent } from './configuration/menus/menu-form/ingredient-dialog/ingredient-dialog.component';
