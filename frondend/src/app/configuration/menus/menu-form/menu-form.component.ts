@@ -11,8 +11,10 @@ import { IngredientDialogComponent } from './ingredient-dialog/ingredient-dialog
 import { Observable } from 'rxjs';
 import { Unit } from '../../units/unit.model';
 import { UnitService } from '../../units/unit.service';
+import { IngredientService } from '../../ingredients/ingredient.service';
 import { Subscription } from 'rxjs';
 import { of } from 'rxjs';
+import { Ingredient } from '../../ingredients/ingredient.model';
 
 @Component({
   selector: 'app-menu-form',
@@ -26,13 +28,19 @@ export class MenuFormComponent implements OnInit {
   isLoading = false;
   displayColumns: string[] = ['name', 'unitName', 'quantity', 'actions'];
   dataSource = new BehaviorSubject<AbstractControl[]>([]);
+
   filteredUnits: Observable<Unit[]>;
   unitListener: Subscription;
   units: Unit[];
 
+  filteredIngredients: Observable<Ingredient[]>;
+  ingredientListener: Subscription;
+  ingredients: Ingredient[];
+
   constructor(
     public menuService: MenuService,
     public unitService: UnitService,
+    public ingredientService: IngredientService,
     public router: Router,
     public route: ActivatedRoute,
     public dialog: MatDialog,
@@ -66,6 +74,8 @@ export class MenuFormComponent implements OnInit {
             description: this.menu.description,
             portions: this.menu.portions,
           });
+
+          // Load units
           this.units = [];
           this.unitService.getUnits(0, 999999);
           this.unitListener = this.unitService
@@ -74,6 +84,17 @@ export class MenuFormComponent implements OnInit {
             this.units = unitData.units;
             console.log(unitData.units);
           });
+
+          // Load ingredients
+          this.ingredients = [];
+          this.ingredientService.getIngredients(0, 999999);
+          this.ingredientListener = this.ingredientService
+          .getIngredientUpdateListener()
+          .subscribe((ingredientData) => {
+            this.ingredients = ingredientData.ingredients;
+            console.log(ingredientData.ingredients);
+          });
+
           if (this.menu.ingredients != null){
             this.menu.ingredients.forEach(ingredient => {
               this.addIngredient(ingredient.name, ingredient.unitName, ingredient.quantity, false)
@@ -96,7 +117,7 @@ export class MenuFormComponent implements OnInit {
   }
 
   updateView() {
-    this.dataSource.next(this.ingredients.controls);
+    this.dataSource.next(this.ingredientList.controls);
   }
 
   addIngredient(name: string, unitName: string, quantity: number, noUpdate?: boolean){
@@ -105,22 +126,27 @@ export class MenuFormComponent implements OnInit {
       this.filteredUnits = of(this._unitsFilter(selectedValue))
     });
 
+    var ingredientControl = new FormControl(name, Validators.required);
+    ingredientControl.valueChanges.subscribe(selectedValue => {
+      this.filteredIngredients = of(this._ingredientsFilter(selectedValue))
+    });
+
     const ingredientForm = this.fb.group({
-      name: [name, Validators.required],
+      name: ingredientControl,
       unitName: unitControl,
       quantity: [quantity, Validators.required]
     });
 
-    this.ingredients.push(ingredientForm);
+    this.ingredientList.push(ingredientForm);
     if (!noUpdate) { this.updateView(); }
   }
 
   deleteIngredient(ingredientIndex: number, noUpdate?: boolean) {
-    this.ingredients.removeAt(ingredientIndex);
+    this.ingredientList.removeAt(ingredientIndex);
     if (!noUpdate) { this.updateView(); }
   }
 
-  get ingredients(): FormArray {
+  get ingredientList(): FormArray {
     return this.menuForm.get('ingredients') as FormArray;
   }
 
@@ -185,23 +211,23 @@ export class MenuFormComponent implements OnInit {
     }
   }
 
-  editItem(){
-
-  }
-
   private _unitsFilter(value: string): Unit[] {
     const filterValue = value.toLowerCase();
 
     return this.units.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 
+  private _ingredientsFilter(value: string): Ingredient[] {
+    const filterValue = value.toLowerCase();
+    return this.ingredients.filter(option => option.name.toLowerCase().includes(filterValue));
+  }
+
   onFocusUnit(control: any){
-    console.log("I am on focus! ");
-    console.log(control);
-    console.log(this.ingredients);
-    var mygroup = this.ingredients.controls[0] as FormGroup;
-    var mycontrol = mygroup.controls.unitName as FormControl;
     this.filteredUnits = of(this._unitsFilter(control.value))
+  }
+
+  onFocusIngredient(control: any){
+    this.filteredIngredients = of(this._ingredientsFilter(control.value));
   }
 
   onChange(control: any){

@@ -47,7 +47,15 @@
               matInput
               type="text"
               formControlName="name"
-              placeholder="Ingredient name">
+              placeholder="Ingredient name"
+              #ingredientInput
+              (focus)="onFocusIngredient(ingredientInput)"
+              [matAutocomplete]="autoIngredients">
+              <mat-autocomplete #autoIngredients="matAutocomplete">
+                <mat-option *ngFor="let option of filteredIngredients | async" [value]="option.name">
+                  {{option.name}}
+                </mat-option>
+              </mat-autocomplete>
           </td>
         </ng-container>
 
@@ -59,8 +67,8 @@
             type="text"
             formControlName="unitName"
             placeholder="Unit"
-            #temp
-            (focus)="onFocusUnit(temp)"
+            #unitInput
+            (focus)="onFocusUnit(unitInput)"
             [matAutocomplete]="autoUnits">
             <mat-autocomplete #autoUnits="matAutocomplete">
               <mat-optgroup *ngFor="let group of filteredUnits | async | groupByUnitType" [label]="group.type">
