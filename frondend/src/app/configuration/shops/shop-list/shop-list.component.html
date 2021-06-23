@@ -1,0 +1,14 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+<app-table
+  *ngIf="!isLoading"
+  [title]="'Shops'"
+  [columnsToDisplay]="displayedColumns"
+  [dataSource]="datasource"
+  [totalItems]="totalItems"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  (onDeleteItem)="delete($event)"
+  (onNewItem)="newItem()"
+  (onEditItem)="editItem($event)"
+  (onPageChanged)="onChangedPage($event)"
+></app-table>
