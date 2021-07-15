@@ -1,14 +1,29 @@
+import 'zone.js/dist/zone-testing';
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AppComponent } from './app.component';
+import { MainNavComponent } from './shared/main-nav/main-nav.component';
+import { MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatNavList } from '@angular/material/list';
+import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterTestingModule, BrowserAnimationsModule ],
       declarations: [
-        AppComponent
+        AppComponent,
+        MainNavComponent,
+        MatSidenavContainer,
+        MatSidenavContent,
+        MatToolbar,
+        MatNavList,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle
       ],
     }).compileComponents();
   }));

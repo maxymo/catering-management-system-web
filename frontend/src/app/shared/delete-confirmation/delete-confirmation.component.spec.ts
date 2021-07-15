@@ -1,5 +1,6 @@
+import 'zone.js/dist/zone-testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { DeleteConfirmationComponent } from './delete-confirmation.component';
 
@@ -9,6 +10,7 @@ describe('DeleteConfirmationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ MatDialogModule ],
       declarations: [ DeleteConfirmationComponent ],
       providers: [
         {

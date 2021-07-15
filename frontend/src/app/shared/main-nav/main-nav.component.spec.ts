@@ -1,3 +1,4 @@
+import 'zone.js/dist/zone-testing';
 import { LayoutModule } from '@angular/cdk/layout';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -8,6 +9,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import { MainNavComponent } from './main-nav.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 describe('MainNavComponent', () => {
   let component: MainNavComponent;
@@ -25,6 +27,7 @@ describe('MainNavComponent', () => {
         MatSidenavModule,
         MatToolbarModule,
         MatMenuModule,
+        MatExpansionModule
       ]
     }).compileComponents();
   }));

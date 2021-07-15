@@ -1,7 +1,9 @@
+import 'zone.js/dist/zone-testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ErrorComponent } from './error.component';
+import { MainNavComponent } from '../main-nav/main-nav.component';
 
 describe('ErrorComponent', () => {
   let component: ErrorComponent;
@@ -9,7 +11,8 @@ describe('ErrorComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ErrorComponent ],
+      imports: [  ],
+      declarations: [ ErrorComponent, MainNavComponent ],
       providers: [
         {
           provide: MAT_DIALOG_DATA, useValue: {}
