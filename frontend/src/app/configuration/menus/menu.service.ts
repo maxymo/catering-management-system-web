@@ -17,7 +17,6 @@ export class MenuService {
   constructor(private http: HttpClient) {}
 
   getMenus(pageSize: number, curentPage: number) {
-    var count = 0;
     this.http
       .get<{ data: any; count: number }>(
         `${BACKEND_URL}?currentPage=${curentPage}&pageSize=${pageSize}`

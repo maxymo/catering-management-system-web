@@ -18,10 +18,10 @@ export class TableComponent implements OnInit {
   @Input() totalItems: number;
   @Input() pageSize: number;
   @Input() pageIndex: number;
-  @Output() onDeleteItem: EventEmitter<any> = new EventEmitter();
-  @Output() onNewItem: EventEmitter<any> = new EventEmitter();
-  @Output() onEditItem: EventEmitter<any> = new EventEmitter();
-  @Output() onPageChanged: EventEmitter<PageEvent> = new EventEmitter();
+  @Output() deleteItemEvent: EventEmitter<any> = new EventEmitter();
+  @Output() newItemEvent: EventEmitter<any> = new EventEmitter();
+  @Output() editItemEvent: EventEmitter<any> = new EventEmitter();
+  @Output() pageChangedEvent: EventEmitter<PageEvent> = new EventEmitter();
 
   constructor(public dialog: MatDialog) {}
 
@@ -32,19 +32,19 @@ export class TableComponent implements OnInit {
   }
 
   deleteItem(id: string) {
-    this.onDeleteItem.emit(id);
+    this.deleteItemEvent.emit(id);
   }
 
   newItem() {
-    this.onNewItem.emit();
+    this.newItemEvent.emit();
   }
 
   editItem(id: string) {
-    this.onEditItem.emit(id);
+    this.editItemEvent.emit(id);
   }
 
   pageChanged(event: PageEvent) {
-    this.onPageChanged.emit(event);
+    this.pageChangedEvent.emit(event);
   }
 
   openDeleteConfirmation(id: string, name: string): void {
@@ -55,7 +55,7 @@ export class TableComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.onDeleteItem.emit(id);
+        this.deleteItemEvent.emit(id);
       }
     });
   }

@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 })
 export class IngredientFormComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  mode: string = 'create';
+  mode = 'create';
   ingredient: Ingredient;
   isLoading = false;
 
@@ -39,9 +39,9 @@ export class IngredientFormComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    var shopNameControl = new FormControl();
-    var unitToBuyControl = new FormControl();
-    var unitToUseControl = new FormControl();
+    const shopNameControl = new FormControl();
+    const unitToBuyControl = new FormControl();
+    const unitToUseControl = new FormControl();
     this.form = new FormGroup({
       name: new FormControl(null, {
         validators: [Validators.required],
@@ -62,8 +62,8 @@ export class IngredientFormComponent implements OnInit, OnDestroy {
           this.shopNames = [];
           this.shopService.getShopNames().subscribe((transformedShopsData) => {
             this.shopNames = transformedShopsData.shopNames.map((shop => {
-              return shop.name
-            }))
+              return shop.name;
+            }));
           });
           this.form.patchValue({
             name: this.ingredient.name,

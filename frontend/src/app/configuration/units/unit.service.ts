@@ -17,7 +17,6 @@ export class UnitService {
   constructor(private http: HttpClient) {}
 
   getUnits(pageSize: number, curentPage: number) {
-    var count = 0;
     this.http
       .get<{ data: any; count: number }>(
         `${BACKEND_URL}?currentPage=${curentPage}&pageSize=${pageSize}`
@@ -48,7 +47,6 @@ export class UnitService {
   }
 
   getUnitsForDropDownList() {
-    var count = 0;
     this.http
       .get<{ data: any; count: number }>(
         `${BACKEND_URL}?currentPage=${0}&pageSize=${9999999}`

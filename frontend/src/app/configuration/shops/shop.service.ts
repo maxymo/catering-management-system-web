@@ -19,7 +19,6 @@ export class ShopService {
   constructor(private http: HttpClient) {}
 
   getShops(pageSize: number, curentPage: number) {
-    var count = 0;
     this.http
       .get<{ data: any; count: number }>(
         `${BACKEND_URL}?currentPage=${curentPage}&pageSize=${pageSize}`
@@ -49,7 +48,6 @@ export class ShopService {
   }
 
   getShopNames() {
-    var count = 0;
     return this.http
       .get<{ data: any; count: number }>(
         `${BACKEND_URL}/names`

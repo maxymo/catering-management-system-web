@@ -34,7 +34,7 @@ describe('TableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TableComponent);
     component = fixture.componentInstance;
-    component.columnsToDisplay = [{ name: "column1", displayName: "Column 1" }]; // 1
+    component.columnsToDisplay = [{ name: 'column1', displayName: 'Column 1' }]; // 1
     fixture.detectChanges();
   });
 

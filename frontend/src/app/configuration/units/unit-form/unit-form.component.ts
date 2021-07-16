@@ -14,7 +14,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class UnitFormComponent implements OnInit {
   form: FormGroup;
-  mode: string = 'create';
+  mode = 'create';
   unit: Unit;
   isLoading = false;
   types = [];

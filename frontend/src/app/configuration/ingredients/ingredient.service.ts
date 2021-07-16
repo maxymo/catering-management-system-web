@@ -17,7 +17,6 @@ export class IngredientService {
   constructor(private http: HttpClient) {}
 
   getIngredients(pageSize: number, curentPage: number) {
-    var count = 0;
     this.http
       .get<{ data: any; count: number }>(
         `${BACKEND_URL}?currentPage=${curentPage}&pageSize=${pageSize}`

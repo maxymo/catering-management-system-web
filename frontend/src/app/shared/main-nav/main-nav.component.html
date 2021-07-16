@@ -2,7 +2,7 @@
   <mat-sidenav
     #drawer
     class="sidenav"
-    [ngClass]="{ hidden: !(XSmall$ | async) }"
+    [ngClass]="{ hidden: (XSmall$ | async) === false }"
     fixedInViewport="false"
     [attr.role]="(XSmall$ | async) ? 'dialog' : 'navigation'"
     [mode]="(XSmall$ | async) ? 'over' : 'side'"
@@ -15,7 +15,7 @@
       <div>
         <button mat-icon-button>
           <mat-icon *ngIf="XSmall$ | async">person</mat-icon>
-          <span *ngIf="!(XSmall$ | async)">Jason</span>
+          <span *ngIf="(XSmall$ | async) === false">Jason</span>
         </button>
       </div>
     </mat-toolbar>
@@ -67,7 +67,7 @@
       >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <div *ngIf="!(XSmall$ | async)">
+      <div *ngIf="(XSmall$ | async) === false">
         <button mat-button routerLink="/">Dashboard</button>
         <button mat-button [matMenuTriggerFor]="ordersMenu">Orders</button>
         <mat-menu #ordersMenu="matMenu">
@@ -114,7 +114,7 @@
       <div>
         <button mat-icon-button>
           <mat-icon *ngIf="XSmall$ | async">person</mat-icon>
-          <span *ngIf="!(XSmall$ | async)">Jason</span>
+          <span *ngIf="(XSmall$ | async) === false">Jason</span>
         </button>
       </div>
     </mat-toolbar>

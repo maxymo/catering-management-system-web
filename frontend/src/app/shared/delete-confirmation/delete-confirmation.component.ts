@@ -7,7 +7,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./delete-confirmation.component.css'],
 })
 export class DeleteConfirmationComponent implements OnInit {
-  @Output() onDeleteItem: EventEmitter<any> = new EventEmitter();
+  @Output() deleteItemEvent: EventEmitter<any> = new EventEmitter();
 
   ngOnInit(): void {}
 

@@ -7,8 +7,8 @@
   [totalItems]="totalItems"
   [pageSize]="pageSize"
   [pageIndex]="pageIndex"
-  (onDeleteItem)="delete($event)"
-  (onNewItem)="newItem()"
-  (onEditItem)="editItem($event)"
-  (onPageChanged)="onChangedPage($event)"
+  (deleteItemEvent)="delete($event)"
+  (newItemEvent)="newItem()"
+  (editItemEvent)="editItem($event)"
+  (pageChangedEvent)="onChangedPage($event)"
 ></app-table>

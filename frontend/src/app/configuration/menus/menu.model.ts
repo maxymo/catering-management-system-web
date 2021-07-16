@@ -1,4 +1,4 @@
-import { MenuIngredient } from "./menu.ingredient.model";
+import { MenuIngredient } from './menu.ingredient.model';
 
 export class Menu {
   id: string;
@@ -6,5 +6,5 @@ export class Menu {
   description: string;
   readonly: boolean;
   portions: number;
-  ingredients: [MenuIngredient]
+  ingredients: [MenuIngredient];
 }

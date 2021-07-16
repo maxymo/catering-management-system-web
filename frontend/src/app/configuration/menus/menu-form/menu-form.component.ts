@@ -23,7 +23,7 @@ import { Ingredient } from '../../ingredients/ingredient.model';
 })
 export class MenuFormComponent implements OnInit {
   menuForm: FormGroup;
-  mode: string = 'create';
+  mode = 'create';
   menu: Menu;
   isLoading = false;
   displayColumns: string[] = ['name', 'unitName', 'quantity', 'actions'];
@@ -97,7 +97,7 @@ export class MenuFormComponent implements OnInit {
 
           if (this.menu.ingredients != null){
             this.menu.ingredients.forEach(ingredient => {
-              this.addIngredient(ingredient.name, ingredient.unitName, ingredient.quantity, false)
+              this.addIngredient(ingredient.name, ingredient.unitName, ingredient.quantity, false);
             });
           }
           this.isLoading = false;
@@ -121,14 +121,14 @@ export class MenuFormComponent implements OnInit {
   }
 
   addIngredient(name: string, unitName: string, quantity: number, noUpdate?: boolean){
-    var unitControl = new FormControl(unitName, Validators.required);
+    const unitControl = new FormControl(unitName, Validators.required);
     unitControl.valueChanges.subscribe(selectedValue => {
-      this.filteredUnits = of(this._unitsFilter(selectedValue))
+      this.filteredUnits = of(this._unitsFilter(selectedValue));
     });
 
-    var ingredientControl = new FormControl(name, Validators.required);
+    const ingredientControl = new FormControl(name, Validators.required);
     ingredientControl.valueChanges.subscribe(selectedValue => {
-      this.filteredIngredients = of(this._ingredientsFilter(selectedValue))
+      this.filteredIngredients = of(this._ingredientsFilter(selectedValue));
     });
 
     const ingredientForm = this.fb.group({
@@ -223,7 +223,7 @@ export class MenuFormComponent implements OnInit {
   }
 
   onFocusUnit(control: any){
-    this.filteredUnits = of(this._unitsFilter(control.value))
+    this.filteredUnits = of(this._unitsFilter(control.value));
   }
 
   onFocusIngredient(control: any){
@@ -231,6 +231,6 @@ export class MenuFormComponent implements OnInit {
   }
 
   onChange(control: any){
-    console.log("I changed");
+    console.log('I changed');
   }
 }

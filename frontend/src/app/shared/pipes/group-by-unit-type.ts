@@ -4,11 +4,11 @@ import { Unit } from '../../configuration/units/unit.model';
 @Pipe({name: 'groupByUnitType'})
 export class GroupByPipe implements PipeTransform {
     transform(collection: Array<Unit>, property: string = 'type'): Array<any> {
-        if(!collection) {
+        if (!collection) {
             return null;
         }
-        const gc = collection.reduce((previous, current)=> {
-            if(!previous[current[property]]) {
+        const gc = collection.reduce((previous, current) => {
+            if (!previous[current[property]]) {
                 previous[current[property]] = [];
             }
 
@@ -17,7 +17,7 @@ export class GroupByPipe implements PipeTransform {
             return previous;
         }, {});
         return Object.keys(gc)
-          .map(type => ({ type: type, units: gc[type] }))
+          .map(type => ({ type, units: gc[type] }))
           .sort((a, b) => a.type > b.type ? 1 : -1);
     }
 }
