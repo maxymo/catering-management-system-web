@@ -1,0 +1,52 @@
+{
+  "name": "catering-management-system-frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "test": "jest --config=jest.config.js --watch",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^9.1.13",
+    "@angular/cdk": "^9.2.4",
+    "@angular/common": "^9.1.13",
+    "@angular/compiler": "^9.1.13",
+    "@angular/core": "^9.1.13",
+    "@angular/forms": "^9.1.13",
+    "@angular/material": "^9.2.4",
+    "@angular/platform-browser": "^9.1.13",
+    "@angular/platform-browser-dynamic": "^9.1.13",
+    "@angular/router": "^9.1.13",
+    "@types/jest": "^26.0.24",
+    "rxjs": "~6.5.4",
+    "tslib": "^1.14.1",
+    "zone.js": "~0.10.2"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^0.901.15",
+    "@angular-eslint/eslint-plugin": "^12.2.0",
+    "@angular-eslint/eslint-plugin-template": "^12.2.0",
+    "@angular/cli": "^9.1.15",
+    "@angular/compiler-cli": "^9.1.13",
+    "@angular/language-service": "^9.1.13",
+    "@types/jasmine": "^3.5.14",
+    "@types/jasminewd2": "^2.0.9",
+    "@types/node": "^12.20.15",
+    "@typescript-eslint/eslint-plugin": "^4.28.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.28.0",
+    "@typescript-eslint/parser": "^4.28.0",
+    "codelyzer": "^5.1.2",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsdoc": "^35.4.0",
+    "eslint-plugin-prefer-arrow": "^1.2.3",
+    "jest": "^27.0.6",
+    "jest-preset-angular": "^9.0.4",
+    "protractor": "~5.4.3",
+    "ts-node": "~8.3.0",
+    "typescript": "~3.8.3"
+  }
+}
