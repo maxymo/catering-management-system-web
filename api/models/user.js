@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, require: true, unique: true },
   password: { type: String, require: true },
   isAdministrator: { type: Boolean, require: true },
+  readonly: { type: Boolean, require: true }
 });
 
 userSchema.statics.initData = async (User) => {
@@ -16,6 +17,7 @@ userSchema.statics.initData = async (User) => {
         email: "admin@catering",
         isAdministrator: true,
         password: hash,
+        readonly: true,
         __v: 0,
       },
     ];

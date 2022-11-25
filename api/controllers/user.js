@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { update } = require("../models/user");
 
 const User = require("../models/user");
 
@@ -43,6 +44,7 @@ exports.createUser = (req, res, next) => {
         isAdministrator: req.body.isAdministrator
           ? req.body.isAdministrator
           : false,
+        readonly: false
       });
 
       user
@@ -99,25 +101,46 @@ exports.getUser = (req, res, next) => {
 
 exports.updateUser = (req, res, next) => {
   try {
-    const userEmail = req.body.email.trim();
-    const userId = req.body.id;
-    const user = new User({
-      _id: userId,
-      email: userEmail,
-      isAdministrator: req.body.isAdministrator,
-    });
-    User.updateOne({ _id: userId, readonly: false }, user)
-      .then((updatedUnit) => {
-        res.status(201).json({
-          message: "User updated succesfully.",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).json({
-          message: "Couldn't update unit",
-        });
+    bcrypt.hash(req.body.password, 10).then((hash) => {
+      const userEmail = req.body.email.trim();
+      const userId = req.body.id;
+      const user = new User({
+        _id: userId,
+        email: userEmail,
+        password: hash,
+        isAdministrator: req.body.isAdministrator
+          ? req.body.isAdministrator
+          : false,
+        readonly: false
       });
+
+      User.findById(userId).then((fetchedUser) => {
+        if (!fetchedUser) {
+          res.status(400).json({
+            message: `USer with id=${ingredientId} does not exist.`,
+          });
+        } else if (fetchedUser.readonly) {
+          res.status(400).json({
+            message: "User cannot be updated because is read only.",
+          });
+        } else {
+          console.log(user);
+          User.updateOne({ _id: userId, readonly: false }, user)
+            .then((updatedUser) => {
+              console.log(updatedUser);
+              res.status(201).json({
+                message: "User updated succesfully.",
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              res.status(500).json({
+                message: "Couldn't update unit",
+              });
+            });
+        }
+      });
+    });
   } catch (error) {
     console.error(error);
     res.status(400).json({
@@ -137,6 +160,9 @@ exports.loginUser = (req, res, next) => {
       .compare(req.body.password, user.password)
       .then((result) => {
         if (!result) {
+          console.log(req.body.password);
+          console.log(user.password);
+          console.warn(result);
           return res
             .status(401)
             .json({ message: "Auth failed. Password or email not valid." });
