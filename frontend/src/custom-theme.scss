@@ -1,0 +1,19 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$my-primary: mat.define-palette(mat.$blue-grey-palette, 500);
+$my-accent: mat.define-palette(mat.$pink-palette, 500, 900, A100);
+$my-warn: mat.define-palette(mat.$deep-orange-palette);
+
+$catering-management-system-theme: mat.define-dark-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+   warn: $my-warn
+ ),
+ typography: mat.define-typography-config(),
+ density: 0,
+));
+
+@include mat.all-component-themes($catering-management-system-theme);
