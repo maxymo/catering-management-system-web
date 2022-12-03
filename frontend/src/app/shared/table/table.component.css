@@ -1,0 +1,11 @@
+table {
+  width: 100%;
+}
+
+.actionsColumn {
+  width: 162px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
