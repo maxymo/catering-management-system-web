@@ -89,13 +89,27 @@
                 </mat-menu>
             </div>
             <div class="spacer"></div>
-            <div>
-                <button mat-icon-button *ngIf="XSmall$ | async">
+            <div *ngIf="authService.isAuth()">
+                <button mat-icon-button [matMenuTriggerFor]="userMenu" *ngIf="XSmall$ | async">
                     <mat-icon>person</mat-icon>
                 </button>
-                <button mat-button *ngIf="(XSmall$ | async) === false">
+                <button mat-button [matMenuTriggerFor]="userMenu" *ngIf="(XSmall$ | async) === false">
                     Jason
                 </button>
+                <mat-menu #userMenu="matMenu">
+                  <button mat-menu-item (click)="onLogout()">
+                    <mat-icon>logout</mat-icon>
+                    <span>Logout</span>
+                  </button>
+                </mat-menu>
+            </div>
+            <div *ngIf="!authService.isAuth()">
+              <button mat-icon-button *ngIf="XSmall$ | async" routerLink="/login">
+                <mat-icon>login</mat-icon>
+              </button>
+              <button mat-button *ngIf="(XSmall$ | async) === false" routerLink="/login">
+                Login
+              </button>
             </div>
         </mat-toolbar>
         <div class="content">

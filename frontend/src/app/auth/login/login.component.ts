@@ -19,12 +19,16 @@ export class LoginComponent implements OnInit, ILoginResult {
   get password() { return this.loginForm.get('password'); }
 
   constructor(
-    public authService: AuthService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.authService.isAuth()){
+      this.router.navigate(['/']);
+    }
+  }
 
   onLogin() {
     this.isLoading = true;
