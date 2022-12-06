@@ -5,7 +5,7 @@ import {Observable, Subject, throwError} from 'rxjs';
 import { AuthData } from './auth-data.model';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import {catchError} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 
 const BACKEND_URL = environment.apiUrl + 'user/';
 const MILLISECONDS = 1000;
@@ -56,53 +56,26 @@ export class AuthService {
       email,
       password,
     };
-    console.log("email: " + email + " and password: " + password);
     return this.http
       .post<{
         token: string;
         expiresIn: number;
         userId: string;
       }>(BACKEND_URL + 'login', authData)
-      // .pipe(
-      //   catchError((err, caught) => {
-      //     //this.handleError(err);
-      //     callback.onFailure();
-      //     return caught;
-      //   })
-      // )
-      // .subscribe((result) => {
-      //   const token = result.token;
-      //   if (token) {
-      //     const expiresIn = result.expiresIn * MILLISECONDS;
-      //     this.setTimer(expiresIn);
-      //     this.token = token;
-      //     this.authStatusListener.next(true);
-      //     this.isAuthenticated = true;
-      //     this.userId = result.userId;
-      //     const now = new Date();
-      //     const expirationDate = new Date(now.getTime() + expiresIn * MILLISECONDS);
-      //     this.saveAuthData(token, expirationDate, this.userId);
-      //     this.router.navigate(['/']);
-      //   }
-      // });
-      .subscribe({
-        next: result => {
-            const token = result.token;
-            if (token) {
-              const expiresIn = result.expiresIn * MILLISECONDS;
-              this.setTimer(expiresIn);
-              this.token = token;
-              this.authStatusListener.next(true);
-              this.isAuthenticated = true;
-              this.userId = result.userId;
-              const now = new Date();
-              const expirationDate = new Date(now.getTime() + expiresIn * MILLISECONDS);
-              this.saveAuthData(token, expirationDate, this.userId);
-              this.router.navigate(['/']);
-            }
-          },
-        error: e => callback.onFailure()
-      })
+      .pipe(
+        map((result: { token: string; expiresIn: number; userId: string; }) => {
+        const token = result.token;
+        const expiresIn = result.expiresIn * MILLISECONDS;
+        this.setTimer(expiresIn);
+        this.token = token;
+        this.authStatusListener.next(true);
+        this.isAuthenticated = true;
+        this.userId = result.userId;
+        const now = new Date();
+        const expirationDate = new Date(now.getTime() + expiresIn * MILLISECONDS);
+        this.saveAuthData(token, expirationDate, this.userId);
+        return result;
+      }))
   }
 
   logout() {
@@ -172,12 +145,12 @@ export class AuthService {
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error);
+      console.error(error.error);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong.
       console.error(
-        `Backend returned code ${error.status}, body was: `, error.error);
+        error.error);
     }
     // Return an observable with a user-facing error message.
     return throwError(() => new Error('Something bad happened; please try again later.'));
