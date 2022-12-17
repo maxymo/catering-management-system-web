@@ -1,8 +1,7 @@
-export class Unit {
+export class Shop {
   constructor(
     public id: string = id ?? '',
     public name: string = name ?? '',
     public description: string = description ?? '',
-    public type: string = type ?? '',
     public readonly: boolean = readonly ?? false) {}
 }

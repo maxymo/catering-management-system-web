@@ -21,6 +21,8 @@ import { ErrorComponent } from './shared/error/error.component';
 import { UnitFormComponent } from './configuration/units/unit-form/unit-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login/login.component';
+import {ShopListComponent} from "./configuration/shops/shop-list/shop-list.component";
+import {ShopFormComponent} from "./configuration/shops/shop-form/shop-form.component";
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { LoginComponent } from './auth/login/login.component';
     DeleteConfirmationComponent,
     ErrorComponent,
     UnitFormComponent,
-    LoginComponent
+    LoginComponent,
+    ShopListComponent,
+    ShopFormComponent
   ],
   imports: [
     BrowserModule,
