@@ -75,40 +75,34 @@ export class UnitFormComponent implements OnInit {
       readonly: false,
     };
 
-    this.isLoading = true;
-    if (this.mode === 'create') {
-      this.unitService
-        .addUnit(unitToSave)
-        .pipe(
-          catchError((_) => {
-            this.isLoading = false;
-            return throwError(_);
-          })
-        )
-        .subscribe((result) => {
-          if (result.id) {
-            this.router.navigate(['/units']);
-          } else {
-            this.isLoading = false;
-          }
-        });
-    } else {
-      unitToSave.id = this.unit.id;
-      this.unitService
-        .updateUnit(unitToSave)
-        .pipe(
-          catchError((_) => {
-            this.isLoading = false;
-            return throwError(_);
-          })
-        )
-        .subscribe((result) => {
-          if (result.message) {
-            this.router.navigate(['/units']);
-          } else {
-            this.isLoading = false;
-          }
-        });
+    try {
+      this.isLoading = true;
+      if (this.mode === 'create') {
+        return this.unitService
+          .addUnit(unitToSave)
+          .subscribe((result) => {
+            if (result.id) {
+              return this.router.navigate(['/units']);
+            } else {
+              return this.isLoading = false;
+            }
+          });
+      } else {
+        unitToSave.id = this.unit.id;
+        return this.unitService
+          .updateUnit(unitToSave)
+          .subscribe((result) => {
+            if (result.message) {
+              return this.router.navigate(['/units']);
+            } else {
+              return this.isLoading = false;
+            }
+          });
+      }
+    }
+    catch (e){
+      this.isLoading = false;
+      throw e;
     }
   }
 }

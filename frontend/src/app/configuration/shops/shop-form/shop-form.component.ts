@@ -36,7 +36,7 @@ export class ShopFormComponent implements OnInit {
       if (paramMap.has('id')) {
         const id = paramMap.get('id');
         this.mode = 'edit';
-        this.shopService.getShop(id).subscribe((result) => {
+        this.shopService.getShop(id ?? '').subscribe((result) => {
           this.shop = result.data;
           console.log(this.shop);
           this.form.setValue({
@@ -47,7 +47,7 @@ export class ShopFormComponent implements OnInit {
         });
       } else {
         this.shop = {
-          id: null,
+          id: '',
           name: '',
           description: '',
           readonly: false,
@@ -63,46 +63,42 @@ export class ShopFormComponent implements OnInit {
     }
 
     const shopToSave: Shop = {
-      id: null,
+      id: '',
       name: this.form.value.name,
       description: this.form.value.description,
       readonly: false,
     };
+    try{
+      this.isLoading = true;
+      if (this.mode === 'create') {
+        return this.shopService
+          .addShop(shopToSave)
+          .subscribe((result) => {
+            if (result.id) {
+              return this.router.navigate(['/shops']);
+            } else {
+              this.isLoading = false;
+              return;
+            }
+          });
 
-    this.isLoading = true;
-    if (this.mode === 'create') {
-      this.shopService
-        .addShop(shopToSave)
-        .pipe(
-          catchError((_) => {
-            this.isLoading = false;
-            return throwError(_);
-          })
-        )
-        .subscribe((result) => {
-          if (result.id) {
-            this.router.navigate(['/shops']);
-          } else {
-            this.isLoading = false;
-          }
-        });
-    } else {
-      shopToSave.id = this.shop.id;
-      this.shopService
-        .updateShop(shopToSave)
-        .pipe(
-          catchError((_) => {
-            this.isLoading = false;
-            return throwError(_);
-          })
-        )
-        .subscribe((result) => {
-          if (result.message) {
-            this.router.navigate(['/shops']);
-          } else {
-            this.isLoading = false;
-          }
-        });
+      } else {
+        shopToSave.id = this.shop.id;
+        return this.shopService
+          .updateShop(shopToSave)
+          .subscribe((result) => {
+            if (result.message) {
+              return this.router.navigate(['/shops']);
+            } else {
+              this.isLoading = false;
+              return;
+            }
+          });
+      }
+    }
+    catch (e){
+      this.isLoading = false;
+      throw e;
     }
   }
 }

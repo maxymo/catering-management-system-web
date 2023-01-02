@@ -1,5 +1,14 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
-<app-table *ngIf="!isLoading" [title]="'Units'" [columnsToDisplay]="displayedColumns" [dataSource]="datasource"
-    [totalItems]="totalItems" [pageSize]="pageSize" [pageIndex]="pageIndex" (deleteItemEvent)="delete($event)"
-    (newItemEvent)="newItem()" (editItemEvent)="editItem($event)" (pageChangedEvent)="onChangedPage($event)">
+<app-table
+  *ngIf="!isLoading"
+  [title]="'Units'"
+  [columnsToDisplay]="displayedColumns"
+  [dataSource]="datasource"
+  [totalItems]="totalItems"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  (deleteItemEvent)="delete($event)"
+  (newItemEvent)="newItem()"
+  (editItemEvent)="editItem($event)"
+  (pageChangedEvent)="onChangedPage($event)">
 </app-table>

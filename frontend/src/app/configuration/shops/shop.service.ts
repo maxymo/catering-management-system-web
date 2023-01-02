@@ -26,7 +26,7 @@ export class ShopService {
       .pipe(
         map((shopData) => {
           return {
-            shops: shopData.data.map((shop) => {
+            shops: shopData.data.map((shop: { _id: any; name: any; description: any; readonly: any; }) => {
               return {
                 id: shop._id,
                 name: shop.name,
@@ -55,7 +55,7 @@ export class ShopService {
       .pipe(
         map((shopData) => {
           return {
-            shopNames: shopData.data.map((shop) => {
+            shopNames: shopData.data.map((shop: { shopName: any; }) => {
               return {
                 name: shop.shopName,
               };

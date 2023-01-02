@@ -18,7 +18,7 @@ export class ShopListComponent implements OnInit, OnDestroy {
   ];
   datasource: Shop[] = [];
   isLoading = false;
-  shopListener: Subscription;
+  shopListener!: Subscription;
   totalItems = 0;
   pageIndex = 0;
   pageSize = 10;
