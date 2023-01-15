@@ -96,9 +96,9 @@ export class IngredientFormComponent implements OnInit, OnDestroy {
       }));
     });
     this.filteredShopNames = shopNameControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._shopsFilter(value))
+      .pipe<string, string[]>(
+        startWith<string, string[]>(''),
+        map<string, string[]>(value => this._shopsFilter(value))
       );
 
     this.units = [];
@@ -110,14 +110,14 @@ export class IngredientFormComponent implements OnInit, OnDestroy {
         console.log(unitData.units);
       });
     this.filteredUnitsWhenBuying = unitToBuyControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._unitsFilter(value))
+      .pipe<string, Unit[]>(
+        startWith<string, string[]>(''),
+        map<string, Unit[]>(value => this._unitsFilter(value))
       );
     this.filteredUnitsWhenUsing = unitToUseControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._unitsFilter(value))
+      .pipe<string, Unit[]>(
+        startWith<string, string[]>(''),
+        map<string, Unit[]>(value => this._unitsFilter(value))
       );
   }
 
