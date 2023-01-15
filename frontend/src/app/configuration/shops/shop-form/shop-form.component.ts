@@ -3,9 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ShopService } from '../shop.service';
 import { Shop } from '../shop.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-shop-form',

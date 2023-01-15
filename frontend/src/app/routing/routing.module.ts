@@ -6,6 +6,8 @@ import { UnitListComponent } from '../configuration/units/unit-list/unit-list.co
 import { LoginComponent } from "../auth/login/login.component";
 import {ShopListComponent} from "../configuration/shops/shop-list/shop-list.component";
 import {ShopFormComponent} from "../configuration/shops/shop-form/shop-form.component";
+import {IngredientListComponent} from "../configuration/ingredients/ingredient-list/ingredient-list.component";
+import {IngredientFormComponent} from "../configuration/ingredients/ingredient-form/ingredient-form.component";
 
 const routes = [
   { path: 'login', component: LoginComponent },
@@ -35,6 +37,20 @@ const routes = [
   {
     path: 'shops/edit/:id',
     component: ShopFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ingredients', component: IngredientListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'ingredients/create',
+    component: IngredientFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'ingredients/edit/:id',
+    component: IngredientFormComponent,
     canActivate: [AuthGuard],
   },
 ];

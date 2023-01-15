@@ -8,6 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { AppComponent } from './app.component';
 import { AngularMaterialModule } from './shared/angular-material/angular-material.module';
@@ -23,6 +24,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login/login.component';
 import {ShopListComponent} from "./configuration/shops/shop-list/shop-list.component";
 import {ShopFormComponent} from "./configuration/shops/shop-form/shop-form.component";
+import {IngredientListComponent} from "./configuration/ingredients/ingredient-list/ingredient-list.component";
+import {IngredientFormComponent} from "./configuration/ingredients/ingredient-form/ingredient-form.component";
+import {GroupByPipe} from "./shared/pipes/group-by-unit-type";
 
 @NgModule({
   declarations: [
@@ -35,7 +39,10 @@ import {ShopFormComponent} from "./configuration/shops/shop-form/shop-form.compo
     UnitFormComponent,
     LoginComponent,
     ShopListComponent,
-    ShopFormComponent
+    ShopFormComponent,
+    IngredientListComponent,
+    IngredientFormComponent,
+    GroupByPipe,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +57,8 @@ import {ShopFormComponent} from "./configuration/shops/shop-form/shop-form.compo
     MatListModule,
     RoutingModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatAutocompleteModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

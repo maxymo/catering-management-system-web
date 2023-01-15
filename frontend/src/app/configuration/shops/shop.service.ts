@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map, count } from 'rxjs/operators';
 
@@ -49,13 +49,13 @@ export class ShopService {
 
   getShopNames() {
     return this.http
-      .get<{ data: any; count: number }>(
+      .get<{ data: { shopName: string }[], count: number }>(
         `${BACKEND_URL}/names`
       )
       .pipe(
         map((shopData) => {
           return {
-            shopNames: shopData.data.map((shop: { shopName: any; }) => {
+            shopNames: shopData.data.map((shop : { shopName: string}) => {
               return {
                 name: shop.shopName,
               };
