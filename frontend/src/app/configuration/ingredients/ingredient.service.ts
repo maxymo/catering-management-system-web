@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map, count } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { Ingredient } from './ingredient.model';
 import { environment } from '../../../environments/environment';
@@ -17,10 +17,10 @@ export class IngredientService {
 
   constructor(private http: HttpClient) {}
 
-  getIngredients(pageSize: number, curentPage: number) {
+  getIngredients(pageSize: number, currentPage: number) {
     this.http
       .get<{ data: IngredientDto[]; count: number }>(
-        `${BACKEND_URL}?currentPage=${curentPage}&pageSize=${pageSize}`
+        `${BACKEND_URL}?currentPage=${currentPage}&pageSize=${pageSize}`
       )
       .pipe(
         map((ingredientData : { count: number, data: IngredientDto[]}) => {

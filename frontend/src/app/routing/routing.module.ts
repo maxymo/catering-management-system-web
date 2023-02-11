@@ -8,6 +8,8 @@ import {ShopListComponent} from "../configuration/shops/shop-list/shop-list.comp
 import {ShopFormComponent} from "../configuration/shops/shop-form/shop-form.component";
 import {IngredientListComponent} from "../configuration/ingredients/ingredient-list/ingredient-list.component";
 import {IngredientFormComponent} from "../configuration/ingredients/ingredient-form/ingredient-form.component";
+import {MenuListComponent} from "../configuration/menus/menu-list/menu-list.component";
+import {MenuFormComponent} from "../configuration/menus/menu-form/menu-form.component";
 
 const routes = [
   { path: 'login', component: LoginComponent },
@@ -51,6 +53,20 @@ const routes = [
   {
     path: 'ingredients/edit/:id',
     component: IngredientFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'menus', component: MenuListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'menus/create',
+    component: MenuFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'menus/edit/:id',
+    component: MenuFormComponent,
     canActivate: [AuthGuard],
   },
 ];
