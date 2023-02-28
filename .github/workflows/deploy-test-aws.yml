@@ -1,0 +1,35 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  STAGE: stg
+  AWS_ACCOUNT: 972670838762
+  AWS_REGION: eu-west-1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: stg
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: npm install
+    - run: npm i @angular/cli
+    - name: Angular Build
+      run: ng build --configuration=staging
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.3.6
+        cli_config_credentials_token: ${{ secrets.TERRAFORM_CLOUD_TOKEN }}
+    - name: Terraform Apply
+      run: terraform init && terraform apply -auto-approve
+      working-directory: deploy/terraform
+      env:
+        TF_VAR_api_endpoint: ${{ secrets.API_ENDPOINT }}
+        TF_VAR_stage: ${{ env.STAGE }}
+        TF_VAR_aws_account: ${{ env.AWS_ACCOUNT }}
+        TF_VAR_aws_region: ${{ env.AWS_REGION }}
