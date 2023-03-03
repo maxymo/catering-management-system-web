@@ -1,4 +1,7 @@
-# Frontend
+# Catering Management System (frontend)
+
+**Warning**
+This Angular website is only a prototype and is not safe or ready for production yet.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.1.
 
