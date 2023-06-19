@@ -1,13 +1,13 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 <mat-card *ngIf="!isLoading">
   <mat-card-content>
-    <form [formGroup]="menuForm" (submit)="onSave()">
+    <form [formGroup]="dishForm" (submit)="onSave()">
       <mat-form-field>
         <input
           matInput
           name="name"
           type="text"
-          placeholder="Menu name"
+          placeholder="Dish name"
           formControlName="name"
         />
       </mat-form-field>
@@ -25,7 +25,7 @@
           matInput
           name="description"
           type="text"
-          placeholder="Description of menu (optional)"
+          placeholder="Description of medishnu (optional)"
           formControlName="description"
         />
       </mat-form-field>
@@ -104,9 +104,9 @@
       </table>
 
       <mat-card-actions>
-        <a mat-raised-button href="/menus">Cancel</a>
+        <a mat-raised-button href="/dishes">Cancel</a>
         <button mat-raised-button color="accent" type="submit">
-          Save menu
+          Save dish
         </button>
       </mat-card-actions>
     </form>

@@ -1,23 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MenuListComponent } from './menu-list.component';
+import { DishListComponent } from './dish-list.component';
 import { MatSpinner } from '@angular/material/progress-spinner';
 
-describe('MenuListComponent', () => {
-  let component: MenuListComponent;
-  let fixture: ComponentFixture<MenuListComponent>;
+describe('DishListComponent', () => {
+  let component: DishListComponent;
+  let fixture: ComponentFixture<DishListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule ],
-      declarations: [ MenuListComponent, MatSpinner ]
+      declarations: [ DishListComponent, MatSpinner ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuListComponent);
+    fixture = TestBed.createComponent(DishListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

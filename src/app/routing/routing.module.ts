@@ -8,8 +8,8 @@ import {ShopListComponent} from "../configuration/shops/shop-list/shop-list.comp
 import {ShopFormComponent} from "../configuration/shops/shop-form/shop-form.component";
 import {IngredientListComponent} from "../configuration/ingredients/ingredient-list/ingredient-list.component";
 import {IngredientFormComponent} from "../configuration/ingredients/ingredient-form/ingredient-form.component";
-import {MenuListComponent} from "../configuration/menus/menu-list/menu-list.component";
-import {MenuFormComponent} from "../configuration/menus/menu-form/menu-form.component";
+import {DishListComponent} from "../configuration/dishes/dish-list/dish-list.component";
+import {DishFormComponent} from "../configuration/dishes/dish-form/dish-form.component";
 
 const routes = [
   { path: 'login', component: LoginComponent },
@@ -56,17 +56,17 @@ const routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: 'menus', component: MenuListComponent,
+    path: 'dishes', component: DishListComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'menus/create',
-    component: MenuFormComponent,
+    path: 'dishes/create',
+    component: DishFormComponent,
     canActivate: [AuthGuard],
   },
   {
-    path: 'menus/edit/:id',
-    component: MenuFormComponent,
+    path: 'dishes/edit/:id',
+    component: DishFormComponent,
     canActivate: [AuthGuard],
   },
 ];

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
-import { MenuService } from '../menu.service';
-import { Menu } from '../menu.model';
+import { DishService } from '../dish.service';
+import { Dish } from '../dish.model';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { catchError, map, startWith } from 'rxjs/operators';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
-import { MenuIngredient } from '../menu.ingredient.model';
+import { DishIngredient } from '../dish.ingredient.model';
 import { IngredientDialogComponent } from './ingredient-dialog/ingredient-dialog.component';
 import { Observable } from 'rxjs';
 import { Unit } from '../../units/unit.model';
@@ -17,14 +17,14 @@ import { of } from 'rxjs';
 import { Ingredient } from '../../ingredients/ingredient.model';
 
 @Component({
-  selector: 'app-menu-form',
-  templateUrl: './menu-form.component.html',
-  styleUrls: ['./menu-form.component.css'],
+  selector: 'app-dish-form',
+  templateUrl: './dish-form.component.html',
+  styleUrls: ['./dish-form.component.css'],
 })
-export class MenuFormComponent implements OnInit {
-  menuForm!: FormGroup;
+export class DishFormComponent implements OnInit {
+  dishForm!: FormGroup;
   mode = 'create';
-  menu!: Menu;
+  dish!: Dish;
   isLoading = false;
   displayColumns: string[] = ['name', 'unitName', 'quantity', 'actions'];
   dataSource = new BehaviorSubject<AbstractControl[]>([]);
@@ -38,7 +38,7 @@ export class MenuFormComponent implements OnInit {
   ingredients!: Ingredient[];
 
   constructor(
-    public menuService: MenuService,
+    public DishService: DishService,
     public unitService: UnitService,
     public ingredientService: IngredientService,
     public router: Router,
@@ -48,7 +48,7 @@ export class MenuFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.menuForm = new FormGroup({
+    this.dishForm = new FormGroup({
       name: new FormControl(null, {
         validators: [Validators.required],
       }),
@@ -64,52 +64,53 @@ export class MenuFormComponent implements OnInit {
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       this.isLoading = true;
+      
+      // Load units
+      this.units = [];
+      this.unitService.getUnits(0, 999999);
+      this.unitListener = this.unitService
+      .getUnitUpdateListener()
+      .subscribe((unitData) => {
+        this.units = unitData.units;
+        console.log(unitData.units);
+      });
+
+      // Load ingredients
+      this.ingredients = [];
+      this.ingredientService.getIngredients(0, 999999);
+      this.ingredientListener = this.ingredientService
+      .getIngredientUpdateListener()
+      .subscribe((ingredientData) => {
+        this.ingredients = ingredientData.ingredients;
+        console.log(ingredientData.ingredients);
+      });
+
       if (paramMap.has('id')) {
         const id = paramMap.get('id');
         this.mode = 'edit';
-        this.menuService.getMenu(id ?? '').subscribe((result) => {
-          this.menu = result.data;
-          this.menuForm.patchValue({
-            name: this.menu.name,
-            description: this.menu.description,
-            portions: this.menu.portions,
+        this.DishService.getDish(id ?? '').subscribe((result) => {
+          this.dish = result.data;
+          this.dishForm.patchValue({
+            name: this.dish.name,
+            description: this.dish.description,
+            portions: this.dish.portions,
           });
 
-          // Load units
-          this.units = [];
-          this.unitService.getUnits(0, 999999);
-          this.unitListener = this.unitService
-          .getUnitUpdateListener()
-          .subscribe((unitData) => {
-            this.units = unitData.units;
-            console.log(unitData.units);
-          });
-
-          // Load ingredients
-          this.ingredients = [];
-          this.ingredientService.getIngredients(0, 999999);
-          this.ingredientListener = this.ingredientService
-          .getIngredientUpdateListener()
-          .subscribe((ingredientData) => {
-            this.ingredients = ingredientData.ingredients;
-            console.log(ingredientData.ingredients);
-          });
-
-          if (this.menu.ingredients != null){
-            this.menu.ingredients.forEach(ingredient => {
+          if (this.dish.ingredients != null){
+            this.dish.ingredients.forEach(ingredient => {
               this.addIngredient(ingredient.name, ingredient.unitName, ingredient.quantity, false);
             });
           }
           this.isLoading = false;
         });
       } else {
-        this.menu = {
+        this.dish = {
           id: '',
           name: '',
           description: '',
           readonly: false,
           portions: 0,
-          ingredients: MenuIngredient[0]
+          ingredients: DishIngredient[0]
         };
         this.isLoading = false;
       }
@@ -147,10 +148,10 @@ export class MenuFormComponent implements OnInit {
   }
 
   get ingredientList(): FormArray {
-    return this.menuForm.get('ingredients') as FormArray;
+    return this.dishForm.get('ingredients') as FormArray;
   }
 
-  openDialog(element: MenuIngredient): void {
+  openDialog(element: DishIngredient): void {
     const dialogRef = this.dialog.open(IngredientDialogComponent, {
       width: '250px',
       data: Object.assign({}, element)
@@ -163,21 +164,21 @@ export class MenuFormComponent implements OnInit {
   }
 
   onSave() {
-    if (!this.menuForm.valid) {
+    if (!this.dishForm.valid) {
       return;
     }
-    const menuToSave: Menu = {
+    const dishToSave: Dish = {
       id: '',
-      name: this.menuForm.value.name,
-      description: this.menuForm.value.description,
+      name: this.dishForm.value.name,
+      description: this.dishForm.value.description,
       readonly: false,
-      portions: this.menuForm.value.portions,
-      ingredients: this.menuForm.value.ingredients,
+      portions: this.dishForm.value.portions,
+      ingredients: this.dishForm.value.ingredients,
     };
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.menuService
-      .addMenu(menuToSave)
+      this.DishService
+      .addDish(dishToSave)
       .pipe(
         catchError((_) => {
           this.isLoading = false;
@@ -186,15 +187,15 @@ export class MenuFormComponent implements OnInit {
         )
         .subscribe((result) => {
           if (result.id) {
-            this.router.navigate(['/menus']);
+            this.router.navigate(['/dishes']);
           } else {
             this.isLoading = false;
           }
         });
       } else {
-        menuToSave.id = this.menu.id;
-        this.menuService
-          .updateMenu(menuToSave)
+        dishToSave.id = this.dish.id;
+        this.DishService
+          .updateDish(dishToSave)
           .pipe(
             catchError((_) => {
               this.isLoading = false;
@@ -203,7 +204,7 @@ export class MenuFormComponent implements OnInit {
           )
           .subscribe((result) => {
             if (result.message) {
-              this.router.navigate(['/menus']);
+              this.router.navigate(['/dishes']);
             } else {
               this.isLoading = false;
             }
@@ -222,6 +223,7 @@ export class MenuFormComponent implements OnInit {
   }
 
   private _ingredientsFilter(value: string | null): Ingredient[] {
+    console.log("value " + value);
     if (value == null){
       return new Ingredient[0];
     }

@@ -1,4 +1,4 @@
-export class MenuIngredient {
+export class DishIngredient {
   constructor(
     public name: string = name ?? '',
     public unitName: string = unitName ?? '',
