@@ -10,6 +10,8 @@ import {IngredientListComponent} from "../configuration/ingredients/ingredient-l
 import {IngredientFormComponent} from "../configuration/ingredients/ingredient-form/ingredient-form.component";
 import {DishListComponent} from "../configuration/dishes/dish-list/dish-list.component";
 import {DishFormComponent} from "../configuration/dishes/dish-form/dish-form.component";
+import {OrderListComponent} from "../configuration/orders/order-list/order-list.component";
+import {OrderFormComponent} from "../configuration/orders/order-form/order-form.component";
 
 const routes = [
   { path: 'login', component: LoginComponent },
@@ -67,6 +69,20 @@ const routes = [
   {
     path: 'dishes/edit/:id',
     component: DishFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'orders', component: OrderListComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'orders/create',
+    component: OrderFormComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'orders/edit/:id',
+    component: OrderFormComponent,
     canActivate: [AuthGuard],
   },
 ];

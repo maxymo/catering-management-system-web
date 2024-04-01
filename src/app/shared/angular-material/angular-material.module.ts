@@ -14,6 +14,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 
 @NgModule({
   exports: [
@@ -31,7 +33,8 @@ import { MatListModule } from '@angular/material/list';
     MatProgressSpinnerModule,
     MatDialogModule,
     MatSelectModule,
-    MatListModule
+    MatListModule,
+    MatDatepickerModule
   ],
 })
 export class AngularMaterialModule { }

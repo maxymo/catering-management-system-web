@@ -1,4 +1,3 @@
-import {Ingredient} from "../ingredients/ingredient.model";
 import {DishIngredient} from "./dish.ingredient.model";
 
 export class DishDto {

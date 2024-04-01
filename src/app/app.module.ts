@@ -30,6 +30,12 @@ import {GroupByPipe} from "./shared/pipes/group-by-unit-type";
 import {DishListComponent} from "./configuration/dishes/dish-list/dish-list.component";
 import {DishFormComponent} from "./configuration/dishes/dish-form/dish-form.component";
 import {IngredientDialogComponent} from "./configuration/dishes/dish-form/ingredient-dialog/ingredient-dialog.component";
+import {OrderListComponent} from "./configuration/orders/order-list/order-list.component";
+import {OrderFormComponent} from "./configuration/orders/order-form/order-form.component";
+import {OrderDialogComponent} from "./configuration/orders/order-form/order-dialog/order-dialog.component";
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MY_FORMATS } from './shared/custom-date-adapter';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [
@@ -48,7 +54,10 @@ import {IngredientDialogComponent} from "./configuration/dishes/dish-form/ingred
     GroupByPipe,
     DishListComponent,
     DishFormComponent,
-    IngredientDialogComponent
+    IngredientDialogComponent,
+    OrderListComponent,
+    OrderFormComponent,
+    OrderDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -68,6 +77,8 @@ import {IngredientDialogComponent} from "./configuration/dishes/dish-form/ingred
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
   bootstrap: [AppComponent]
 })
